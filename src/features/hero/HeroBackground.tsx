@@ -1,6 +1,7 @@
 import type { Application } from '@splinetool/runtime';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 
+import { usePointerAutoplay } from '../../animations/use-pointer-autoplay';
 import { useInView } from '../../hooks/use-in-view';
 import { useReducedMotion } from '../../hooks/use-reduced-motion';
 import styles from './HeroSection.module.css';
@@ -30,6 +31,9 @@ function prefersLightweightExperience(): boolean {
  * paint only see the pre-rendered HTML. Reduced-motion and data-saver
  * visitors get the calm gradient backdrop with no WebGL at all, and the
  * render loop is stopped whenever the hero leaves the viewport.
+ *
+ * On touch devices the scene plays itself until the first real touch, since
+ * there is no hover to build the blocks with.
  */
 export function HeroBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,6 +54,8 @@ export function HeroBackground() {
       application.stop();
     }
   }, [application, inView]);
+
+  usePointerAutoplay(containerRef, application !== null && inView);
 
   return (
     <div ref={containerRef} className={styles.background} aria-hidden="true">

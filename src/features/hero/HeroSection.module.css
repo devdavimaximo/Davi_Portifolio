@@ -54,16 +54,29 @@
 /* --- Content ------------------------------------------------------------- */
 
 .content {
+  /* Height of the fixed header: a 2.75rem control plus its --space-sm inset. */
+  --header-clearance: 4.75rem;
+
   position: relative;
   z-index: var(--z-overlay);
   width: 100%;
   max-width: var(--layout-max-width);
   margin-inline: auto;
   padding-inline: var(--layout-gutter);
-  /* Top padding clears the fixed header. */
-  padding-block: var(--space-3xl) var(--space-xl);
+  /* Top padding clears the fixed header, plus a step of air under it. */
+  padding-block: calc(var(--header-clearance) + var(--space-lg)) var(--space-xl);
   display: grid;
   gap: var(--space-lg);
+  /* Single column, so the copy fills the hero instead of clumping in the
+     middle: the headline anchors under the header and the description plus
+     action sit at the bottom, within thumb reach. The two-column layout
+     re-centers it. The cap keeps the block shorter than the viewport on every
+     phone: the leftover height becomes air above and below (the hero centres
+     it), so the two groups read as spread apart without being pinned to the
+     edges or leaving a crater between them. */
+  flex: 1;
+  max-block-size: 46rem;
+  align-content: space-between;
   /* Let the pointer reach the scene through the copy, exactly like the
      reference — only the actionable elements catch events again. */
   pointer-events: none;
@@ -154,8 +167,12 @@
 
 @media (min-width: 64rem) {
   .content {
+    flex: 0 1 auto;
+    max-block-size: none;
+    padding-block: var(--space-3xl) var(--space-xl);
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     align-items: center;
+    align-content: normal;
     gap: var(--space-2xl);
   }
 
