@@ -58,7 +58,10 @@ export function HeroBackground() {
           <Spline
             scene={SCENE_URL}
             onLoad={setApplication}
-            className={styles.splineCanvas}
+            className={[
+              styles.splineCanvas,
+              application ? styles.splineCanvasReady : '',
+            ].join(' ')}
           />
         </Suspense>
       )}
