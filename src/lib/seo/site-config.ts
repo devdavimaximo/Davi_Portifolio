@@ -7,6 +7,8 @@
  * never emit each other's canonical URLs.
  */
 
+import { defaultLocale } from '../i18n';
+
 const FALLBACK_ORIGIN = 'https://example.com';
 
 /** Origin without a trailing slash, e.g. `https://davimaximo.dev`. */
@@ -30,8 +32,9 @@ export interface SiteConfig {
   readonly titleTemplate: string;
   readonly description: string;
   readonly keywords: readonly string[];
+  /** Open Graph locale, underscore-separated (`pt_BR`). */
   readonly locale: string;
-  /** BCP 47 tag written to `<html lang>` and `og:locale`. */
+  /** BCP 47 tag written to `<html lang>` and to `inLanguage` in JSON-LD. */
   readonly htmlLang: string;
   readonly author: SiteAuthor;
   /** Path to the default social share image, relative to the site root. */
@@ -45,23 +48,24 @@ export interface SiteConfig {
 // the public domain are settled.
 export const siteConfig: SiteConfig = {
   name: 'Davi Maximo',
-  title: 'Davi Maximo — Front-end Developer',
+  title: 'Davi Maximo — Desenvolvedor Front-end',
   titleTemplate: '%s — Davi Maximo',
   description:
-    'Front-end developer crafting fast, accessible and memorable web experiences.',
+    'Desenvolvedor front-end criando experiências web rápidas, acessíveis e memoráveis.',
   keywords: [
-    'front-end developer',
-    'creative developer',
+    'desenvolvedor front-end',
+    'desenvolvedor criativo',
     'react',
     'typescript',
-    'web animation',
-    'portfolio',
+    'animação web',
+    'portfólio',
   ],
-  locale: 'en',
-  htmlLang: 'en',
+  // Derived from the i18n base locale so the two can never disagree.
+  locale: defaultLocale.replace('-', '_'),
+  htmlLang: defaultLocale,
   author: {
     name: 'Davi Maximo',
-    jobTitle: 'Front-end Developer',
+    jobTitle: 'Desenvolvedor Front-end',
     email: 'davimaximoquooss@gmail.com',
     sameAs: [],
   },

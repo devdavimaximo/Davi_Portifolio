@@ -1,6 +1,6 @@
 import type { Locale } from '../config';
-import { en, type Dictionary } from './en';
+import { ptBr, type Dictionary } from './pt-br';
 
-export const dictionaries: Record<Locale, Dictionary> = { en };
+export const dictionaries: Record<Locale, Dictionary> = { 'pt-BR': ptBr };
 
 export type { Dictionary };
