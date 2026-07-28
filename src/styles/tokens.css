@@ -1,0 +1,72 @@
+/**
+ * Design tokens — the only place raw values are allowed.
+ *
+ * TODO(F0): these are neutral placeholders. The art direction pass replaces
+ * every value here; components must keep consuming the variables, not the
+ * literals, so that swap stays a one-file change.
+ */
+
+:root {
+  /* --- Color ------------------------------------------------------------ */
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-fg: #f5f5f5;
+  --color-fg-muted: #a3a3a3;
+  --color-accent: #f5f5f5;
+  --color-focus: #7dd3fc;
+
+  /* --- Typography ------------------------------------------------------- */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Code', monospace;
+  --font-display: var(--font-sans);
+
+  /* Fluid scale: min at 360px, max at 1440px. */
+  --text-xs: clamp(0.75rem, 0.72rem + 0.14vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.84rem + 0.16vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.96rem + 0.19vw, 1.125rem);
+  --text-lg: clamp(1.25rem, 1.15rem + 0.44vw, 1.5rem);
+  --text-xl: clamp(1.75rem, 1.5rem + 1.11vw, 2.5rem);
+  --text-2xl: clamp(2.5rem, 1.9rem + 2.67vw, 4rem);
+  --text-display: clamp(3.5rem, 2.2rem + 5.78vw, 7rem);
+
+  --leading-tight: 1.05;
+  --leading-snug: 1.25;
+  --leading-normal: 1.6;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.08em;
+
+  /* --- Space (4px base) ------------------------------------------------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+  --space-3xl: 9rem;
+
+  /* --- Layout ----------------------------------------------------------- */
+  --layout-max-width: 90rem;
+  --layout-gutter: clamp(1rem, 4vw, 4rem);
+  --layout-columns: 12;
+
+  /* --- Motion (mirrors src/animations/motion-tokens.ts) ----------------- */
+  --duration-instant: 120ms;
+  --duration-fast: 240ms;
+  --duration-base: 400ms;
+  --duration-slow: 700ms;
+  --duration-slower: 1100ms;
+
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-expressive: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* --- Elevation / depth ------------------------------------------------ */
+  --z-base: 0;
+  --z-overlay: 10;
+  --z-nav: 20;
+  --z-modal: 30;
+}

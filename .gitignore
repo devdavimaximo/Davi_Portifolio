@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+dist-ssr/
+.vite/
+*.tsbuildinfo
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Hidden folders are local tooling / editor state and never part of the build
+/.*/
+!/.github/
+
+# Editor and solution files
+*.suo
+*.sln
+*.slnx
+*.esproj
+*.njsproj
+*.ntvs*
+*.sw?
+
+# Working notes and internal documentation are not part of the deliverable
+/*.md
+!/README.md
+/docs/
+
+# Audit artifacts
+/lighthouse/
+*.report.html
