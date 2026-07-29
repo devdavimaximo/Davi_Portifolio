@@ -54,9 +54,6 @@
 /* --- Content ------------------------------------------------------------- */
 
 .content {
-  /* Height of the fixed header: a 2.75rem control plus its --space-sm inset. */
-  --header-clearance: 4.75rem;
-
   position: relative;
   z-index: var(--z-overlay);
   width: 100%;
@@ -64,7 +61,8 @@
   margin-inline: auto;
   padding-inline: var(--layout-gutter);
   /* Top padding clears the fixed header, plus a step of air under it. */
-  padding-block: calc(var(--header-clearance) + var(--space-lg)) var(--space-xl);
+  padding-block: calc(var(--layout-header-height) + var(--space-lg))
+    var(--space-xl);
   display: grid;
   gap: var(--space-lg);
   /* Single column, so the copy fills the hero instead of clumping in the

@@ -1,0 +1,274 @@
+/* --- Section -------------------------------------------------------------- */
+
+.about {
+  /* Derived from the global tokens, not new raw values: the section draws a
+     technical grid, and both its cell and its line colour follow the palette. */
+  --grid-cell: 2.5rem;
+  --hairline: color-mix(in srgb, var(--color-fg) 9%, transparent);
+
+  position: relative;
+  padding-block: var(--space-3xl);
+  scroll-margin-top: var(--layout-header-height);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+  display: grid;
+  gap: var(--space-lg);
+  /* Mobile order matches the DOM exactly: the portrait breaks the column of
+     text right after the statement, before the detail arrives. */
+  grid-template-areas:
+    'label'
+    'headline'
+    'portrait'
+    'body';
+}
+
+/* --- Section label -------------------------------------------------------- */
+
+.label {
+  grid-area: label;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+/* Rule that carries the label across the full measure of the section. */
+.label::after {
+  content: '';
+  flex: 1;
+  block-size: 1px;
+  background-color: var(--hairline);
+}
+
+.index {
+  color: var(--color-fg);
+}
+
+/* --- Headline ------------------------------------------------------------- */
+
+.headline {
+  grid-area: headline;
+  display: flex;
+  flex-direction: column;
+  /* Each line is one unbroken sentence, so the type has to be small enough for
+     the longest of them to fit the measure. That line runs 14.13x the font
+     size, and the container is the viewport minus two gutters, which lands the
+     ceiling just above 6.5vw — 6.2vw keeps a margin for a wider fallback face.
+     Re-measure this factor when the real display font replaces the system
+     stack: a different face changes the ratio and this stops fitting. */
+  font-size: min(var(--text-2xl), 6.2vw);
+  font-weight: 500;
+}
+
+/* Reveal mask. The padding/negative-margin pair keeps descenders from being
+   clipped by the overflow at tight line-height. */
+.lineMask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.09em;
+  margin-bottom: -0.09em;
+}
+
+.line {
+  display: block;
+  /* Never break: the two sentences are written as two lines and read as a pair.
+     The mask's `overflow: hidden` doubles as the safety net — if a fallback face
+     ever renders wider than the measure, the line is clipped instead of pushing
+     the page into a horizontal scroll. */
+  white-space: nowrap;
+}
+
+/* The sentence lands on its last line; dropping that line to the muted tone
+   gives the pair a beat in the middle instead of one flat block of type. */
+.lineMask:last-child .line {
+  color: var(--color-fg-muted);
+}
+
+/* --- Body ----------------------------------------------------------------- */
+
+.body {
+  grid-area: body;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-inline-size: 62ch;
+}
+
+.paragraph {
+  color: var(--color-fg-muted);
+}
+
+/* Lead paragraph carries the hierarchy; the rest supports it. */
+.paragraph:first-child {
+  color: var(--color-fg);
+}
+
+/* --- Principles ----------------------------------------------------------- */
+
+/* Deliberately not a bordered table: the skills section will own that form, and
+   two rule-separated lists on one page would read as the same block twice. */
+.principles {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: 0;
+  list-style: none;
+}
+
+.principle {
+  display: grid;
+  grid-template-columns: var(--space-md) minmax(0, 1fr);
+  column-gap: var(--space-sm);
+  align-items: start;
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  text-wrap: pretty;
+}
+
+/* A hairline instead of a bullet — same drawing language as the section rule
+   and the portrait's grid. Offset to meet the optical centre of the first line
+   rather than its baseline, so it still aligns when the text wraps. */
+.principle::before {
+  content: '';
+  margin-block-start: 0.6em;
+  block-size: 1px;
+  background-color: color-mix(in srgb, var(--color-fg) 35%, transparent);
+}
+
+/* --- Portrait ------------------------------------------------------------- */
+
+.portrait {
+  grid-area: portrait;
+  position: relative;
+  /* Own stacking context, so the backdrop layers sit behind the figure without
+     escaping the section. */
+  isolation: isolate;
+  display: flex;
+  justify-content: center;
+  inline-size: 100%;
+  max-inline-size: 26rem;
+  margin-inline: auto;
+}
+
+/* The plate the figure stands in. It starts below the top of the head on
+   purpose: the subject breaks the rule instead of sitting inside a box. */
+.plate {
+  position: absolute;
+  inset: 20% 0 0;
+  z-index: -1;
+  border-top: 1px solid var(--hairline);
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--hairline) 0 1px,
+      transparent 1px var(--grid-cell)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--hairline) 0 1px,
+      transparent 1px var(--grid-cell)
+    );
+  /* Radial rather than linear, so the grid has no hard edge on any side: it
+     surfaces around the figure and dissolves into the page everywhere else. */
+  -webkit-mask-image: radial-gradient(
+    115% 85% at 50% 5%,
+    #000 25%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(115% 85% at 50% 5%, #000 25%, transparent 78%);
+}
+
+/* Neutral on purpose: the portrait's own violet stays the single point of
+   colour in an otherwise monochrome page. */
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    46% 34% at 50% 34%,
+    color-mix(in srgb, var(--color-fg) 12%, transparent),
+    transparent 70%
+  );
+}
+
+/* Lets the <img> be the flex child directly, so <picture> adds no layout. */
+.picture {
+  display: contents;
+}
+
+.image {
+  position: relative;
+  inline-size: 100%;
+  /* A beat between the statement and the detail, not a full screen of face:
+     on a phone the figure stays well inside the fold. */
+  max-inline-size: min(15rem, 60vw);
+  /* The 3:4 source reserved a third of its height for torso that the mask then
+     erased, so the layout box was far taller than the figure and dragged it
+     low against the copy. Cropping to the part that actually reads makes the
+     box match the ink. */
+  aspect-ratio: 300 / 340;
+  object-fit: cover;
+  object-position: top center;
+  /* The cut-out ends in a hard horizontal edge across the shirt — fading it out
+     dissolves the figure into the page instead of showing that seam. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 97%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 97%);
+}
+
+/* --- Wide layouts --------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  /* Label and description read as one row, like a spec sheet. */
+  .focusItem {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: var(--space-md);
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 64rem) {
+  .inner {
+    /* Wider left column than the default split: the statement has to fit it on
+       one line, and the portrait only needs room for a 20rem figure. */
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    /* The portrait spans both rows, holding the right side from the statement
+       down. Giving the headline the full measure instead left the upper right
+       empty and stranded the figure in the lower half of the section. */
+    grid-template-areas:
+      'label    label'
+      'headline portrait'
+      'body     portrait';
+    align-items: start;
+    column-gap: var(--space-2xl);
+    row-gap: var(--space-xl);
+  }
+
+  /* Back inside the left column, so its ceiling is that column rather than the
+     full measure: ~7/11 of it, minus the gap. Measured at the narrowest
+     desktop, where the column is tightest relative to the viewport. */
+  .headline {
+    font-size: min(var(--text-2xl), 3.55vw);
+  }
+
+  /* Centred across the two rows it spans, so the figure sits on the same axis
+     as the whole left column — statement and copy together — instead of
+     hanging from the top of it. */
+  .portrait {
+    align-self: center;
+  }
+
+  /* The source is 300px wide; going much past it only prints a soft upscale. */
+  .image {
+    max-inline-size: 20rem;
+  }
+}

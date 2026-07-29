@@ -1,7 +1,8 @@
+import { AboutSection } from '../../features/about';
 import { HeroSection } from '../../features/hero';
 import { createPersonSchema, createWebSiteSchema, Seo } from '../../lib/seo';
 
-/** Home route: metadata plus the entry experience. */
+/** Home route: metadata, the entry experience and the sections below it. */
 export default function HomePage() {
   return (
     <>
@@ -10,6 +11,7 @@ export default function HomePage() {
         jsonLd={[createPersonSchema(), createWebSiteSchema()]}
       />
       <HeroSection />
+      <AboutSection />
     </>
   );
 }

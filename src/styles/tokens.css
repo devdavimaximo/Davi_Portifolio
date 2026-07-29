@@ -8,7 +8,10 @@
 
 :root {
   /* --- Color ------------------------------------------------------------ */
-  --color-bg: #0a0a0a;
+  /* Pure black, because the hero's 3D scene paints its own background pure
+     black: anything lighter here would make every section below the hero read
+     as a different, washed-out surface. */
+  --color-bg: #000000;
   --color-surface: #141414;
   --color-fg: #f5f5f5;
   --color-fg-muted: #a3a3a3;
@@ -52,6 +55,9 @@
   --layout-max-width: 90rem;
   --layout-gutter: clamp(1rem, 4vw, 4rem);
   --layout-columns: 12;
+  /* Fixed header: a 2.75rem control plus its --space-sm inset on each side.
+     Sections clear it with padding or `scroll-margin-top`. */
+  --layout-header-height: 4.75rem;
 
   /* --- Motion (mirrors src/animations/motion-tokens.ts) ----------------- */
   --duration-instant: 120ms;
