@@ -188,8 +188,8 @@
   mask-image: radial-gradient(115% 85% at 50% 5%, #000 25%, transparent 78%);
 }
 
-/* Neutral on purpose: the portrait's own violet stays the single point of
-   colour in an otherwise monochrome page. */
+/* Monochrome, like the rest of the page: just enough lift to separate the
+   figure from pure black so the cut-out does not read as pasted on. */
 .glow {
   position: absolute;
   inset: 0;
@@ -201,21 +201,18 @@
   );
 }
 
-/* Lets the <img> be the flex child directly, so <picture> adds no layout. */
-.picture {
-  display: contents;
-}
-
 .image {
   position: relative;
+  /* Explicit, and load-bearing: the backdrop layers sit at z-index -1, but on
+     their own that did not keep them under the figure — measured against a
+     render with them hidden, the backdrop was tinting the face. */
+  z-index: 1;
   inline-size: 100%;
   /* A beat between the statement and the detail, not a full screen of face:
      on a phone the figure stays well inside the fold. */
-  max-inline-size: min(15rem, 60vw);
-  /* The 3:4 source reserved a third of its height for torso that the mask then
-     erased, so the layout box was far taller than the figure and dragged it
-     low against the copy. Cropping to the part that actually reads makes the
-     box match the ink. */
+  max-inline-size: min(20rem, 72vw);
+  /* Shorter than the photo's own 3:4, so `cover` trims the torso the mask was
+     going to dissolve anyway and the box matches the ink rather than the file. */
   aspect-ratio: 300 / 340;
   object-fit: cover;
   object-position: top center;
@@ -267,8 +264,10 @@
     align-self: center;
   }
 
-  /* The source is 300px wide; going much past it only prints a soft upscale. */
+  /* As wide as the figure's own cap, so the photo takes the whole right column
+     — this is the largest it can be drawn before the grid has to change. The
+     1086px file still has pixels to spare here, even at 2x. */
   .image {
-    max-inline-size: 20rem;
+    max-inline-size: 26rem;
   }
 }

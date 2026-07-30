@@ -18,7 +18,10 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
 
     server: {
-      port: 59864,
+      // Keep dev and preview below 49152: Windows lets Hyper-V/WSL reserve
+      // blocks of the ephemeral range, and binding inside one fails with
+      // EACCES on a port that is otherwise unused.
+      port: 5173,
     },
 
     preview: {

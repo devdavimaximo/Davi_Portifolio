@@ -38,7 +38,7 @@ export const ptBr = {
       'Uno lógica, performance e design para criar produtos completos.',
     ],
     portraitAlt:
-      'Retrato de Davi Maximo Quoos, com metade do rosto tomada por circuitos luminosos.',
+      'Retrato de Davi Maximo Quoos, de jaqueta preta, olhando para a câmera.',
   },
 } as const;
 
