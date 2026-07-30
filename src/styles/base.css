@@ -36,7 +36,7 @@ h4 {
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   text-wrap: balance;
-  font-weight: 500;
+  font-weight: var(--weight-display);
 }
 
 p {

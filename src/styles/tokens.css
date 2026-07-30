@@ -19,9 +19,17 @@
   --color-focus: #7dd3fc;
 
   /* --- Typography ------------------------------------------------------- */
-  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Code', monospace;
-  --font-display: var(--font-sans);
+  /* Fallbacks are same-category so the swap from `font-display: swap` shifts
+     metrics as little as possible. See src/styles/fonts.css. */
+  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Code',
+    monospace;
+  --font-display: 'Chakra Petch', ui-sans-serif, system-ui, sans-serif;
+
+  /* Chakra Petch ships a single weight, so this is the only value any display
+     element may use. Changing it means adding a font file. */
+  --weight-display: 700;
 
   /* Fluid scale: min at 360px, max at 1440px. */
   --text-xs: clamp(0.75rem, 0.72rem + 0.14vw, 0.8125rem);

@@ -10,6 +10,32 @@
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
 
+    <!-- All three faces render inside the first viewport — the hero headline in
+         Chakra Petch, its description in Instrument Sans, its eyebrow and stack
+         line in Geist Mono — so all three are worth the preload. `crossorigin`
+         is required even same-origin, or the font is fetched twice. -->
+    <link
+      rel="preload"
+      href="/fonts/chakra-petch-700-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/instrument-sans-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/geist-mono-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <!-- The hero scene streams from Spline's CDN after hydration; warming the
          connection early shaves the handshake off its load time. -->
     <link rel="preconnect" href="https://prod.spline.design" crossorigin />

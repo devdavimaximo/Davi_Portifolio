@@ -1,0 +1,56 @@
+/**
+ * Self-hosted typefaces. All three are served from `public/fonts/`, so the site
+ * never depends on a third-party font CDN for its first paint.
+ *
+ * Subset: `latin` only (U+0000-00FF plus punctuation and symbols). Every
+ * accented character pt-BR needs — ã õ ç ê á í ó ú à — lives in Latin-1
+ * Supplement, so `latin-ext` would add weight without adding a single glyph
+ * this site can render.
+ *
+ * The three roles are deliberate and each earns its bytes:
+ *   display — Chakra Petch, headlines only, one weight
+ *   text    — Instrument Sans, body copy and UI
+ *   meta    — Geist Mono, eyebrows, section indices and the stack line
+ *
+ * 62 KB in total, which is less than the two-family pairing this replaced.
+ */
+
+/**
+ * Display: Chakra Petch. Not a variable font — every weight is its own file, so
+ * only 700 is shipped and every display element is set to 700 on purpose. Add a
+ * second weight here only if a design actually needs one.
+ */
+@font-face {
+  font-family: 'Chakra Petch';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/chakra-petch-700-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Text: Instrument Sans, variable weight. */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/instrument-sans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Meta: Geist Mono, variable weight. Also the tabular-figure face. */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/geist-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}

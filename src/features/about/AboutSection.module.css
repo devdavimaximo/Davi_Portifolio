@@ -59,23 +59,31 @@
   grid-area: headline;
   display: flex;
   flex-direction: column;
-  /* Each line is one unbroken sentence, so the type has to be small enough for
-     the longest of them to fit the measure. That line runs 14.13x the font
-     size, and the container is the viewport minus two gutters, which lands the
-     ceiling just above 6.5vw — 6.2vw keeps a margin for a wider fallback face.
-     Re-measure this factor when the real display font replaces the system
-     stack: a different face changes the ratio and this stops fitting. */
-  font-size: min(var(--text-2xl), 6.2vw);
-  font-weight: 500;
+  font-weight: var(--weight-display);
+  /* The type is sized against this element's own width rather than the
+     viewport's. Every earlier attempt used vw, which needs one hand-measured
+     constant per breakpoint and still misses two cases: below ~400px the gutter
+     stops scaling and freezes at 1rem, and past ~1500px `.inner` hits
+     --layout-max-width and the column freezes too — in both, vw keeps moving
+     while the real measure does not. A container query tracks the column
+     exactly, at every width, with one number. */
+  container-type: inline-size;
 }
 
 /* Reveal mask. The padding/negative-margin pair keeps descenders from being
-   clipped by the overflow at tight line-height. */
+   clipped by the overflow at tight line-height.
+   The display size lives here, not on `.headline`: sizing an element from its
+   own container query would be circular, and the `em` padding above has to
+   resolve against the display size to keep clearing the descenders. */
 .lineMask {
   display: block;
   overflow: hidden;
   padding-bottom: 0.09em;
   margin-bottom: -0.09em;
+  /* Longest line runs 15.185x the font size in Chakra Petch 700, measured in
+     the browser — so it fits the column at 6.58cqw. 6.3cqw leaves ~4% of slack
+     for rounding. Re-measure that factor if the display face ever changes. */
+  font-size: min(var(--text-2xl), 6.3cqw);
 }
 
 .line {
@@ -250,12 +258,9 @@
     row-gap: var(--space-xl);
   }
 
-  /* Back inside the left column, so its ceiling is that column rather than the
-     full measure: ~7/11 of it, minus the gap. Measured at the narrowest
-     desktop, where the column is tightest relative to the viewport. */
-  .headline {
-    font-size: min(var(--text-2xl), 3.55vw);
-  }
+  /* No font-size override here any more. The container query on `.headline`
+     already sees the narrower column this breakpoint creates, so the type
+     adapts on its own. */
 
   /* Centred across the two rows it spans, so the figure sits on the same axis
      as the whole left column — statement and copy together — instead of
