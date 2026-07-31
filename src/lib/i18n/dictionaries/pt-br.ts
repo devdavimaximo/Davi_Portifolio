@@ -40,6 +40,28 @@ export const ptBr = {
     portraitAlt:
       'Retrato de Davi Maximo Quoos, de jaqueta preta, olhando para a câmera.',
   },
+  works: {
+    index: '02',
+    label: 'Trabalho',
+    headlineLines: ['Cada um resolveu', 'um problema caro.'],
+    /* Accessible name of the disclosure control on each row. Visible on wide
+       layouts, screen-reader-only on narrow ones. */
+    expand: 'Ver o caso',
+    collapse: 'Fechar',
+    /* Labels of the three beats every case is told in. They repeat on every
+       entry, which is what makes the section read as a spec sheet instead of a
+       pile of prose. */
+    beats: {
+      problem: 'Problema',
+      decision: 'Decisão',
+      outcome: 'Resultado',
+    },
+    meta: {
+      role: 'Papel',
+      client: 'Contexto',
+      stack: 'Stack',
+    },
+  },
 } as const;
 
 export type Dictionary = typeof ptBr;
