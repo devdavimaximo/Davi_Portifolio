@@ -5,7 +5,7 @@
  * sitemap tooling without pulling React in.
  */
 
-import { absoluteUrl, siteConfig } from './site-config';
+import { absoluteUrl, canonicalUrl, siteConfig } from './site-config';
 
 /** Minimal structural type for a JSON-LD node — enough to stay type-safe without a schema library. */
 export interface JsonLdNode {
@@ -56,10 +56,10 @@ export function createCreativeWorkSchema(work: CreativeWorkInput): JsonLdNode {
   return {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
-    '@id': `${absoluteUrl(work.path)}#creativework`,
+    '@id': `${canonicalUrl(work.path)}#creativework`,
     name: work.name,
     description: work.description,
-    url: absoluteUrl(work.path),
+    url: canonicalUrl(work.path),
     inLanguage: siteConfig.htmlLang,
     creator: { '@id': `${absoluteUrl('/')}#person` },
     ...(work.image && { image: absoluteUrl(work.image) }),
@@ -83,7 +83,7 @@ export function createBreadcrumbSchema(
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: absoluteUrl(item.path),
+      item: canonicalUrl(item.path),
     })),
   };
 }

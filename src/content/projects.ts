@@ -3,14 +3,14 @@ import type { Project } from './types';
 /**
  * Showcase source of truth.
  *
- * ⚠️ TODO(F3): the third case is still placeholder — the prose is lorem ipsum
- * on purpose, so it cannot be mistaken for a real claim about a real client or
- * ship by accident. Replace it before this section goes anywhere near
- * production; the first two are real.
+ * `slug` is the case's permanent identity: it becomes the route segment once
+ * per-case pages exist, so it is also the URL that gets shared and indexed.
+ * Change one before those routes ship and it costs nothing; change one after
+ * and it breaks a live address. Keep them lowercase, unaccented and hyphenated.
  */
 export const projects: readonly Project[] = [
   {
-    slug: 'gestao-de-faturamento',
+    slug: 'gestao-comercial-erp-pdv',
     title: 'Sistema de gestão comercial | ERP + PDV',
     summary:
       'Substitui uma solução terceirizada cara e pouco adaptada à operação por um sistema próprio, visual e moldado ao fluxo real da loja.',
@@ -31,7 +31,7 @@ export const projects: readonly Project[] = [
     },
   },
   {
-    slug: 'integracao-de-estoque',
+    slug: 'gestao-escolar-contraturno',
     title: 'Sistema de gestão escolar para escolinha contraturno',
     summary:
       'Uma plataforma completa para centralizar a gestão da escolinha, substituir processos manuais e tornar informações essenciais mais acessíveis à equipe.',
@@ -52,13 +52,13 @@ export const projects: readonly Project[] = [
     },
   },
   {
-    slug: 'portal-do-cliente',
+    slug: 'site-institucional-landing-page',
     title: 'Site institucional + LP de conversão',
     summary:
       'Um site para posicionar a marca e uma landing page criada para converter tráfego pago em novos assinantes.',
     role: 'Desenvolvimento Frontend · Direção Visual · UI/UX',
     client: 'Empresa sem site próprio e com campanhas direcionadas diretamente ao WhatsApp, sem uma página dedicada para apresentar e converter os planos recorrentes.',
-    stack: ['React · TypeScript · TailwindCSS'],
+    stack: ['React', 'TypeScript', 'TailwindCSS'],
     narrative: {
       problem:
         'A empresa não possuía uma presença digital própria para apresentar sua identidade, fortalecer o posicionamento da marca e concentrar informações em um único lugar. Além disso, as campanhas pagas direcionavam os usuários diretamente ao WhatsApp, sem uma página dedicada para explicar os planos, responder dúvidas e conduzir a decisão antes do contato.',

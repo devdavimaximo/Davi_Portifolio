@@ -155,7 +155,7 @@
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
-  color: #737373;
+  color: var(--color-fg-subtle);
   font-variant-numeric: tabular-nums;
 }
 
@@ -219,7 +219,7 @@
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: #737373;
+  color: var(--color-fg-subtle);
   text-wrap: pretty;
 }
 
@@ -232,7 +232,7 @@
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: #737373;
+  color: var(--color-fg-subtle);
   /* The control reads as one unit; letting it wrap turned "Ver o caso" into two
      ragged lines and threw the row's baseline off. */
   white-space: nowrap;
@@ -306,66 +306,52 @@
   }
 }
 
-.meta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
-  margin: 0;
-}
-
-.metaRow {
-  display: grid;
-  grid-template-columns: 5.5rem minmax(0, 1fr);
-  gap: var(--space-2xs);
+/* Sits under the argument, on the panel's full width, so the way out of the row
+   is the last thing read rather than something competing with the beats. */
+.panelLink {
+  grid-column: 1 / -1;
+  justify-self: start;
+  display: inline-flex;
   align-items: baseline;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  line-height: var(--leading-snug);
-}
-
-.metaLabel {
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: #737373;
-}
-
-.metaValue {
-  margin: 0;
-  color: var(--color-fg-muted);
-  text-wrap: pretty;
-}
-
-.beats {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-  margin: 0;
-  max-inline-size: 62ch;
-}
-
-.beat {
-  display: grid;
-  gap: var(--space-3xs);
-}
-
-.beatLabel {
+  gap: var(--space-2xs);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: #737373;
-}
-
-.beatValue {
-  margin: 0;
-  color: var(--color-fg-muted);
-  text-wrap: pretty;
-}
-
-/* The result is what the reader opened the case for, so it is the one beat set
-   in the full-strength tone instead of the muted one. */
-.beat:last-child .beatValue {
   color: var(--color-fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-3xs);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.panelLink:hover {
+  border-bottom-color: var(--color-fg);
+}
+
+.panelLink:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+/* Travels on hover, which a static arrow cannot do — and only `transform`, so
+   nothing around it is laid out again. */
+.panelLinkArrow {
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.panelLink:hover .panelLinkArrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelLinkArrow {
+    transition: none;
+  }
+
+  .panelLink:hover .panelLinkArrow {
+    transform: none;
+  }
 }
 
 /* --- Wide layouts --------------------------------------------------------- */

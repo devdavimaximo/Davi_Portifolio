@@ -15,6 +15,11 @@
   --color-surface: #141414;
   --color-fg: #f5f5f5;
   --color-fg-muted: #a3a3a3;
+  /* Quietest tone in the ramp — eyebrows, indices, spec-sheet labels. Not a
+     free choice: on pure black this is 4.89:1, and the next step down (#737373,
+     which the works section used as a raw value) measures 4.42:1 and fails AA
+     for the small mono type it is always used on. */
+  --color-fg-subtle: #7a7a7a;
   --color-accent: #f5f5f5;
   --color-focus: #7dd3fc;
 

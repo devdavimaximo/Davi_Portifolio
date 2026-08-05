@@ -48,6 +48,8 @@ export const ptBr = {
        layouts, screen-reader-only on narrow ones. */
     expand: 'Ver o caso',
     collapse: 'Fechar',
+    /* Leads out of the index and into the case's own page. */
+    viewCase: 'Ver o case completo',
     /* Labels of the three beats every case is told in. They repeat on every
        entry, which is what makes the section read as a spec sheet instead of a
        pile of prose. */
@@ -60,6 +62,14 @@ export const ptBr = {
       role: 'Papel',
       client: 'Contexto',
       stack: 'Stack',
+    },
+  },
+  caseStudy: {
+    breadcrumbLabel: 'Trilha de navegação',
+    back: 'Voltar para os projetos',
+    notFound: {
+      title: 'Caso não encontrado',
+      body: 'O endereço não corresponde a nenhum caso publicado.',
     },
   },
 } as const;

@@ -1,0 +1,205 @@
+/* --- Page ----------------------------------------------------------------- */
+
+.page {
+  /* Same pen as the index and the about section, so a case page reads as part
+     of the site rather than as a document exported out of it. */
+  --hairline: color-mix(in srgb, var(--color-fg) 9%, transparent);
+
+  /* The header is fixed, so the top padding has to clear it before the section
+     rhythm starts — otherwise the breadcrumb renders underneath the wordmark. */
+  padding-block: calc(var(--layout-header-height) + var(--space-xl))
+    var(--space-3xl);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+  display: grid;
+  gap: var(--space-xl);
+}
+
+/* --- Breadcrumb ----------------------------------------------------------- */
+
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.trail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-fg-subtle);
+}
+
+/* The separator is drawn by CSS rather than typed into the markup, so a screen
+   reader hears the trail as a list and not as a line of slashes. */
+.crumb + .crumb::before {
+  content: '/';
+  margin-inline-end: var(--space-2xs);
+  color: var(--hairline);
+}
+
+/* The last crumb is the page itself, and the <h1> restates it two lines below.
+   On a phone that repetition costs three wrapped lines of uppercase mono before
+   the title is even reached, so it is hidden from sight — and only from sight:
+   it stays in the accessibility tree, where the trail has to be complete. */
+.crumb[aria-current] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.crumb[aria-current]::before {
+  content: none;
+}
+
+/* --- Header --------------------------------------------------------------- */
+
+.header {
+  display: grid;
+  gap: var(--space-md);
+  /* Sized from the column, not the viewport: past --layout-max-width the
+     viewport keeps growing while the real measure stops. */
+  container-type: inline-size;
+}
+
+/* Sized off the column so the title keeps its lead over the summary at every
+   width: capped at 7cqw it landed on 21.9px against a 20px summary on a phone,
+   which is not a hierarchy. */
+.title {
+  font-size: min(var(--text-2xl), 9.5cqw);
+  max-inline-size: 20ch;
+}
+
+.summary {
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  color: var(--color-fg-muted);
+  max-inline-size: 54ch;
+}
+
+/* The one element carrying real visual weight, exactly as on the index — this
+   showcase has no screens to show, so the figure does the cover image's job. */
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3xs);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--hairline);
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-xl);
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  font-variant-numeric: tabular-nums;
+  /* A figure is one token, never two lines. The label below it wraps instead. */
+  white-space: nowrap;
+}
+
+.metricLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+  text-wrap: pretty;
+}
+
+/* --- Body ----------------------------------------------------------------- */
+
+.body {
+  display: grid;
+  gap: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--hairline);
+}
+
+/* --- Back ----------------------------------------------------------------- */
+
+.back {
+  justify-self: start;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-3xs);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.back:hover {
+  border-bottom-color: var(--color-fg);
+}
+
+.backArrow {
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.back:hover .backArrow {
+  transform: translateX(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backArrow {
+    transition: none;
+  }
+
+  .back:hover .backArrow {
+    transform: none;
+  }
+}
+
+/* --- Wide layouts --------------------------------------------------------- */
+
+/* 64rem — the same structural breakpoint the index and the about section turn
+   on, so the whole site changes shape at one width. */
+@media (min-width: 64rem) {
+  /* Room for the full trail again, so the page states where it sits. */
+  .crumb[aria-current] {
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    overflow: visible;
+    clip-path: none;
+    color: var(--color-fg);
+  }
+
+  .crumb[aria-current]::before {
+    content: '/';
+    margin-inline-end: var(--space-2xs);
+    color: var(--hairline);
+  }
+
+  .metricValue {
+    font-size: var(--text-2xl);
+  }
+
+  /* The argument becomes two columns: the spec sheet beside the prose, in the
+     same arrangement the index panel uses when it opens. */
+  .body {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    column-gap: var(--space-2xl);
+    align-items: start;
+  }
+}

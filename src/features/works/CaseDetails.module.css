@@ -1,0 +1,65 @@
+/* Styles of the case argument itself. Deliberately free of any positioning:
+   the container that renders <CaseDetails /> — the index panel or the case
+   page — is what places these two lists relative to each other. */
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  margin: 0;
+}
+
+.metaRow {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: var(--space-2xs);
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+}
+
+.metaLabel {
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+.metaValue {
+  margin: 0;
+  color: var(--color-fg-muted);
+  text-wrap: pretty;
+}
+
+.beats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin: 0;
+  max-inline-size: 62ch;
+}
+
+.beat {
+  display: grid;
+  gap: var(--space-3xs);
+}
+
+.beatLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+.beatValue {
+  margin: 0;
+  color: var(--color-fg-muted);
+  text-wrap: pretty;
+}
+
+/* The result is what the reader opened the case for, so it is the one beat set
+   in the full-strength tone instead of the muted one. */
+.beat:last-child .beatValue {
+  color: var(--color-fg);
+}

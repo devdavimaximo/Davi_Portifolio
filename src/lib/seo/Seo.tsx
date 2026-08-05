@@ -1,7 +1,7 @@
 import { Head } from 'vite-react-ssg';
 
 import type { JsonLdNode } from './json-ld';
-import { absoluteUrl, siteConfig } from './site-config';
+import { absoluteUrl, canonicalUrl, siteConfig } from './site-config';
 
 export interface SeoProps {
   /** Route title without the brand suffix. Omit on the home route. */
@@ -35,12 +35,18 @@ export function Seo({
   const resolvedTitle = title
     ? siteConfig.titleTemplate.replace('%s', title)
     : siteConfig.title;
-  const canonical = absoluteUrl(path);
+  const canonical = canonicalUrl(path);
   const imageUrl = absoluteUrl(image);
 
   return (
     <Head>
       <html lang={siteConfig.htmlLang} />
+      {/* Declared here as well as in `index.html`: the pre-renderer injects this
+          block at the top of <head>, which pushed the template's own charset
+          past ~2.9 KB — far outside the first 1024 bytes a parser is required to
+          decide the encoding in. On a page of pt-BR accents that is not
+          cosmetic. Browsers honour the first declaration, so this one wins. */}
+      <meta charSet="UTF-8" />
       <title>{resolvedTitle}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={siteConfig.keywords.join(', ')} />

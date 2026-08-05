@@ -1,7 +1,10 @@
-import { useId, useState } from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import type { Project } from '../../content/types';
 import { useTranslation } from '../../lib/i18n';
+import { CaseDetails } from './CaseDetails';
+import { caseRoutePath } from './case-route';
 import styles from './WorksSection.module.css';
 
 interface CaseEntryProps {
@@ -26,24 +29,19 @@ interface CaseEntryProps {
 export function CaseEntry({ project, index }: CaseEntryProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const panelId = useId();
-  const { beats, meta } = t.works;
 
-  const metaRows = [
-    { label: meta.role, value: project.role },
-    ...(project.client ? [{ label: meta.client, value: project.client }] : []),
-    { label: meta.stack, value: project.stack.join(' · ') },
-  ];
-
-  const beatRows = [
-    { label: beats.problem, value: project.narrative.problem },
-    { label: beats.decision, value: project.narrative.decision },
-    { label: beats.outcome, value: project.narrative.outcome },
-  ];
+  /* Derived from the slug rather than generated: the slug is already unique and
+     stable, and a readable id doubles as a deep link to a single case. */
+  const headingId = `case-${project.slug}`;
+  const panelId = `${headingId}-panel`;
 
   return (
-    <article className={styles.case} data-works-entry="">
-      <h3 className={styles.caseHeading}>
+    <article
+      className={styles.case}
+      aria-labelledby={headingId}
+      data-works-entry=""
+    >
+      <h3 id={headingId} className={styles.caseHeading}>
         <button
           type="button"
           className={styles.caseTrigger}
@@ -80,23 +78,20 @@ export function CaseEntry({ project, index }: CaseEntryProps) {
         hidden={!isOpen}
         data-open={isOpen ? '' : undefined}
       >
-        <dl className={styles.meta}>
-          {metaRows.map((row) => (
-            <div key={row.label} className={styles.metaRow}>
-              <dt className={styles.metaLabel}>{row.label}</dt>
-              <dd className={styles.metaValue}>{row.value}</dd>
-            </div>
-          ))}
-        </dl>
+        <CaseDetails project={project} />
 
-        <dl className={styles.beats}>
-          {beatRows.map((row) => (
-            <div key={row.label} className={styles.beat}>
-              <dt className={styles.beatLabel}>{row.label}</dt>
-              <dd className={styles.beatValue}>{row.value}</dd>
-            </div>
-          ))}
-        </dl>
+        {/* Named after the case it leads to: three rows repeating the same link
+            text are indistinguishable in a screen reader's list of links. */}
+        <Link
+          className={styles.panelLink}
+          to={caseRoutePath(project.slug)}
+          aria-label={`${t.works.viewCase}: ${project.title}`}
+        >
+          {t.works.viewCase}
+          <span className={styles.panelLinkArrow} aria-hidden="true">
+            →
+          </span>
+        </Link>
       </div>
     </article>
   );

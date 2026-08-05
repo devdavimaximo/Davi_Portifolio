@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import { SiteHeader } from '../components/SiteHeader';
+import { useRouteScroll } from '../hooks/use-route-scroll';
 import { useTranslation } from '../lib/i18n';
 
 /**
@@ -10,6 +11,8 @@ import { useTranslation } from '../lib/i18n';
  */
 export function RootLayout() {
   const { t } = useTranslation();
+
+  useRouteScroll();
 
   return (
     <>

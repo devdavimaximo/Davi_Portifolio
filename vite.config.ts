@@ -2,6 +2,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
 
 import { createSitemapCollector } from './build/sitemap';
+import { getPublishedProjects } from './src/content/projects';
+import { caseRoutePath } from './src/features/works/case-route';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
@@ -53,6 +55,14 @@ export default defineConfig(({ mode }) => {
       // `/works` -> `/works/index.html`, so canonical URLs need no `.html`
       // suffix and no host-specific rewrite rules.
       dirStyle: 'nested',
+      // A dynamic route has no address until a slug fills it in, so the case
+      // pages have to be named here or they are never rendered. Reading them
+      // from the same content module the section renders means adding a case is
+      // still a single edit to `src/content/projects.ts`.
+      includedRoutes: (paths) => [
+        ...paths.filter((path) => !path.includes(':')),
+        ...getPublishedProjects().map((project) => caseRoutePath(project.slug)),
+      ],
       onPageRendered: sitemap.onPageRendered,
       onFinished: sitemap.onFinished,
     },

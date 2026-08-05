@@ -74,8 +74,22 @@ export const siteConfig: SiteConfig = {
   themeColor: '#000000',
 };
 
-/** Turns a route path into an absolute canonical URL. */
+/** Turns any site-relative path into an absolute URL. */
 export function absoluteUrl(path = '/'): string {
   if (/^https?:\/\//.test(path)) return path;
   return `${siteUrl}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
+/**
+ * The one spelling of a page's address: absolute, with a trailing slash.
+ *
+ * `dirStyle: 'nested'` writes every route as `<route>/index.html`, and the
+ * sitemap lists it that way, so a canonical without the slash would point at a
+ * second URL for the same file and split its signals. Paths carrying a fragment
+ * or a query are left as they are — a slash there would change what they mean.
+ */
+export function canonicalUrl(path = '/'): string {
+  const url = absoluteUrl(path);
+  if (/[#?]/.test(url) || url.endsWith('/')) return url;
+  return `${url}/`;
 }

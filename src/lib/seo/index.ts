@@ -11,5 +11,5 @@ export type {
   CreativeWorkInput,
   JsonLdNode,
 } from './json-ld';
-export { absoluteUrl, siteConfig, siteUrl } from './site-config';
+export { absoluteUrl, canonicalUrl, siteConfig, siteUrl } from './site-config';
 export type { SiteAuthor, SiteConfig } from './site-config';

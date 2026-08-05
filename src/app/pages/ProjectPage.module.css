@@ -1,0 +1,14 @@
+/* Fallback for a hand-typed slug that matches nothing. Deliberately plain: it
+   is not a designed surface, it is a way out. */
+
+.missing {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+  padding-block: calc(var(--layout-header-height) + var(--space-2xl))
+    var(--space-3xl);
+  display: grid;
+  gap: var(--space-md);
+  justify-items: start;
+}
