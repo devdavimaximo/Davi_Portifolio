@@ -1,10 +1,6 @@
 /* --- Section -------------------------------------------------------------- */
 
 .works {
-  /* Same hairline the about section derives, so the two sections draw with one
-     pen rather than two similar ones. */
-  --hairline: color-mix(in srgb, var(--color-fg) 9%, transparent);
-
   position: relative;
   padding-block: var(--space-3xl);
   scroll-margin-top: var(--layout-header-height);
@@ -19,61 +15,8 @@
   gap: var(--space-lg);
 }
 
-/* --- Section label -------------------------------------------------------- */
-
-.label {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--color-fg-muted);
-}
-
-.label::after {
-  content: '';
-  flex: 1;
-  block-size: 1px;
-  background-color: var(--hairline);
-}
-
-.index {
-  color: var(--color-fg);
-}
-
-/* --- Headline ------------------------------------------------------------- */
-
-.headline {
-  display: flex;
-  flex-direction: column;
-  font-weight: var(--weight-display);
-  /* Sized from its own width rather than the viewport, for the same reason the
-     about headline is: below ~400px the gutter stops scaling and past ~1500px
-     `.inner` hits --layout-max-width, and in both the viewport keeps moving
-     while the real measure does not. */
-  container-type: inline-size;
-}
-
-.lineMask {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.09em;
-  margin-bottom: -0.09em;
-  /* Same ceiling as the about statement on purpose, so the two are set at one
-     scale and read as one voice. */
-  font-size: min(var(--text-2xl), 6.3cqw);
-}
-
-.line {
-  display: block;
-  white-space: nowrap;
-}
-
-.lineMask:last-child .line {
-  color: var(--color-fg-muted);
-}
+/* The section label and the masked statement live in SectionHeading.module.css,
+   shared with every other section. */
 
 /* --- The ledger ----------------------------------------------------------- */
 
@@ -86,7 +29,7 @@
 /* A rule above every row, including the first: the list reads as a ledger of
    entries rather than as a stack of cards. */
 .case {
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--color-hairline);
 }
 
 /* The heading carries no style of its own — it exists so each case is a real
@@ -320,7 +263,7 @@
   text-transform: uppercase;
   color: var(--color-fg);
   text-decoration: none;
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--color-hairline);
   padding-bottom: var(--space-3xs);
   transition: border-color var(--duration-fast) var(--ease-standard);
 }

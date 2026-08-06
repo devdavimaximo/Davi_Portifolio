@@ -64,6 +64,20 @@ export const ptBr = {
       stack: 'Stack',
     },
   },
+  skills: {
+    index: '03',
+    label: 'Stack',
+    /* Written short on purpose: the shared headline mask never wraps a line,
+       so a statement much longer than these is clipped rather than reflowed. */
+    headlineLines: ['Não coleciono tecnologia.', 'Escolho a que resolve.'],
+    /* The two ends of the depth axis the section is drawn along. They are what
+       turn a list of layers into a section through a system. */
+    surface: 'Superfície',
+    foundation: 'Fundação',
+    /* Names the axis for screen readers, which get the layers as a plain
+       ordered list and never see the drawing. */
+    depthLabel: 'Camadas do sistema, da superfície à fundação',
+  },
   caseStudy: {
     breadcrumbLabel: 'Trilha de navegação',
     back: 'Voltar para os projetos',

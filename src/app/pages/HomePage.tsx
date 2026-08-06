@@ -1,5 +1,6 @@
 import { AboutSection } from '../../features/about';
 import { HeroSection } from '../../features/hero';
+import { SkillsSection } from '../../features/skills';
 import { WorksSection } from '../../features/works';
 import { createPersonSchema, createWebSiteSchema, Seo } from '../../lib/seo';
 
@@ -14,6 +15,7 @@ export default function HomePage() {
       <HeroSection />
       <AboutSection />
       <WorksSection />
+      <SkillsSection />
     </>
   );
 }

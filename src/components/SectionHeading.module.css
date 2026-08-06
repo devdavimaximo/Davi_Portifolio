@@ -1,0 +1,85 @@
+/**
+ * The section heading, in one place.
+ *
+ * These rules were duplicated verbatim between the about and the works
+ * stylesheets. Two more sections were about to copy them a third and a fourth
+ * time, which is when "similar" starts drifting into "different".
+ */
+
+/* --- Section label -------------------------------------------------------- */
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+/* Rule that carries the label across the full measure of the section. */
+.label::after {
+  content: '';
+  flex: 1;
+  block-size: 1px;
+  background-color: var(--color-hairline);
+}
+
+.index {
+  color: var(--color-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Headline ------------------------------------------------------------- */
+
+.headline {
+  display: flex;
+  flex-direction: column;
+  font-weight: var(--weight-display);
+  /* The type is sized against this element's own width rather than the
+     viewport's. Every earlier attempt used vw, which needs one hand-measured
+     constant per breakpoint and still misses two cases: below ~400px the gutter
+     stops scaling and freezes at 1rem, and past ~1500px the section's inner
+     column hits --layout-max-width and freezes too — in both, vw keeps moving
+     while the real measure does not. A container query tracks the column
+     exactly, at every width, with one number. */
+  container-type: inline-size;
+}
+
+/* Reveal mask. The padding/negative-margin pair keeps descenders from being
+   clipped by the overflow at tight line-height.
+   The display size lives here, not on `.headline`: sizing an element from its
+   own container query would be circular, and the `em` padding above has to
+   resolve against the display size to keep clearing the descenders. */
+.lineMask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.09em;
+  margin-bottom: -0.09em;
+  /* Longest line runs 15.185x the font size in Chakra Petch 700, measured in
+     the browser — so it fits the column at 6.58cqw. 6.3cqw leaves ~4% of slack
+     for rounding. Re-measure that factor if the display face ever changes.
+
+     Now a shared ceiling, which makes it a shared constraint: `.line` below
+     never wraps, so a headline written much longer than the existing ones is
+     clipped by the mask rather than reflowed. Keep new headline lines within
+     roughly the same measure. */
+  font-size: min(var(--text-2xl), 6.3cqw);
+}
+
+.line {
+  display: block;
+  /* Never break: the sentences are written as lines and read as a set. The
+     mask's `overflow: hidden` doubles as the safety net — if a fallback face
+     ever renders wider than the measure, the line is clipped instead of pushing
+     the page into a horizontal scroll. */
+  white-space: nowrap;
+}
+
+/* The sentence lands on its last line; dropping that line to the muted tone
+   gives the set a beat in the middle instead of one flat block of type. */
+.lineMask:last-child .line {
+  color: var(--color-fg-muted);
+}

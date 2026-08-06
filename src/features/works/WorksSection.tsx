@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
-import { useWorksReveal } from '../../animations/use-works-reveal';
+import { useSectionReveal } from '../../animations/use-section-reveal';
+import { SectionHeading } from '../../components/SectionHeading';
 import { getPublishedProjects } from '../../content/projects';
 import { useTranslation } from '../../lib/i18n';
 import { CaseEntry } from './CaseEntry';
@@ -26,7 +27,7 @@ export function WorksSection() {
   const { t } = useTranslation();
   const projects = getPublishedProjects();
 
-  useWorksReveal(sectionRef);
+  useSectionReveal(sectionRef);
 
   if (projects.length === 0) return null;
 
@@ -38,20 +39,12 @@ export function WorksSection() {
       aria-labelledby={HEADING_ID}
     >
       <div className={styles.inner}>
-        <p className={styles.label} data-works-fade="">
-          <span className={styles.index}>{t.works.index}</span>
-          {t.works.label}
-        </p>
-
-        <h2 id={HEADING_ID} className={styles.headline}>
-          {t.works.headlineLines.map((line) => (
-            <span key={line} className={styles.lineMask}>
-              <span className={styles.line} data-works-line="">
-                {line}
-              </span>
-            </span>
-          ))}
-        </h2>
+        <SectionHeading
+          index={t.works.index}
+          label={t.works.label}
+          lines={t.works.headlineLines}
+          headingId={HEADING_ID}
+        />
 
         <div className={styles.cases}>
           {projects.map((project, position) => (

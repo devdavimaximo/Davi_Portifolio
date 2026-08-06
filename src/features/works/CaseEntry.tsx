@@ -39,7 +39,7 @@ export function CaseEntry({ project, index }: CaseEntryProps) {
     <article
       className={styles.case}
       aria-labelledby={headingId}
-      data-works-entry=""
+      data-reveal-trail=""
     >
       <h3 id={headingId} className={styles.caseHeading}>
         <button

@@ -2,7 +2,6 @@ import { useRef } from 'react';
 
 import { useHeroIntro } from '../../animations/use-hero-intro';
 import { useTranslation } from '../../lib/i18n';
-import { siteConfig } from '../../lib/seo';
 import { HeroBackground } from './HeroBackground';
 import styles from './HeroSection.module.css';
 
@@ -46,7 +45,11 @@ export function HeroSection() {
           </p>
           <a
             className={styles.cta}
-            href={`mailto:${siteConfig.author.email}`}
+            /* Goes where the label promises. This opened the mail client while
+               reading "Ver projetos" — the one action in the first fold sent
+               everyone who trusted it to the wrong place. Contact is its own
+               section now, and the header holds that invitation. */
+            href="#works"
             data-hero-fade=""
           >
             {t.hero.contactCta}

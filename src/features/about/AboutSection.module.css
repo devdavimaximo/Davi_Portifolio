@@ -1,10 +1,10 @@
 /* --- Section -------------------------------------------------------------- */
 
 .about {
-  /* Derived from the global tokens, not new raw values: the section draws a
-     technical grid, and both its cell and its line colour follow the palette. */
+  /* Derived from the global tokens, not a new raw value: the section draws a
+     technical grid, and its cell follows the spacing scale. The line colour it
+     is drawn in is --color-hairline, shared with every rule on the page. */
   --grid-cell: 2.5rem;
-  --hairline: color-mix(in srgb, var(--color-fg) 9%, transparent);
 
   position: relative;
   padding-block: var(--space-3xl);
@@ -27,78 +27,18 @@
     'body';
 }
 
-/* --- Section label -------------------------------------------------------- */
+/* --- Section heading ------------------------------------------------------ */
 
-.label {
+/* The label and the masked statement are drawn by SectionHeading, shared with
+   every other section. Only their placement in this section's grid belongs
+   here — which is why the component takes placement classes at all. */
+
+.labelArea {
   grid-area: label;
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--color-fg-muted);
 }
 
-/* Rule that carries the label across the full measure of the section. */
-.label::after {
-  content: '';
-  flex: 1;
-  block-size: 1px;
-  background-color: var(--hairline);
-}
-
-.index {
-  color: var(--color-fg);
-}
-
-/* --- Headline ------------------------------------------------------------- */
-
-.headline {
+.headlineArea {
   grid-area: headline;
-  display: flex;
-  flex-direction: column;
-  font-weight: var(--weight-display);
-  /* The type is sized against this element's own width rather than the
-     viewport's. Every earlier attempt used vw, which needs one hand-measured
-     constant per breakpoint and still misses two cases: below ~400px the gutter
-     stops scaling and freezes at 1rem, and past ~1500px `.inner` hits
-     --layout-max-width and the column freezes too — in both, vw keeps moving
-     while the real measure does not. A container query tracks the column
-     exactly, at every width, with one number. */
-  container-type: inline-size;
-}
-
-/* Reveal mask. The padding/negative-margin pair keeps descenders from being
-   clipped by the overflow at tight line-height.
-   The display size lives here, not on `.headline`: sizing an element from its
-   own container query would be circular, and the `em` padding above has to
-   resolve against the display size to keep clearing the descenders. */
-.lineMask {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.09em;
-  margin-bottom: -0.09em;
-  /* Longest line runs 15.185x the font size in Chakra Petch 700, measured in
-     the browser — so it fits the column at 6.58cqw. 6.3cqw leaves ~4% of slack
-     for rounding. Re-measure that factor if the display face ever changes. */
-  font-size: min(var(--text-2xl), 6.3cqw);
-}
-
-.line {
-  display: block;
-  /* Never break: the two sentences are written as two lines and read as a pair.
-     The mask's `overflow: hidden` doubles as the safety net — if a fallback face
-     ever renders wider than the measure, the line is clipped instead of pushing
-     the page into a horizontal scroll. */
-  white-space: nowrap;
-}
-
-/* The sentence lands on its last line; dropping that line to the muted tone
-   gives the pair a beat in the middle instead of one flat block of type. */
-.lineMask:last-child .line {
-  color: var(--color-fg-muted);
 }
 
 /* --- Body ----------------------------------------------------------------- */
@@ -122,8 +62,10 @@
 
 /* --- Principles ----------------------------------------------------------- */
 
-/* Deliberately not a bordered table: the skills section will own that form, and
-   two rule-separated lists on one page would read as the same block twice. */
+/* Deliberately not a bordered table: the works ledger owns that form, and two
+   rule-separated lists on one page would read as the same block twice. The
+   skills section learned this the hard way — its first version was a second
+   ledger, and it is drawn along a depth axis now for exactly this reason. */
 .principles {
   margin-top: var(--space-sm);
   display: flex;
@@ -174,16 +116,16 @@
   position: absolute;
   inset: 20% 0 0;
   z-index: -1;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--color-hairline);
   background-image:
     repeating-linear-gradient(
       to right,
-      var(--hairline) 0 1px,
+      var(--color-hairline) 0 1px,
       transparent 1px var(--grid-cell)
     ),
     repeating-linear-gradient(
       to bottom,
-      var(--hairline) 0 1px,
+      var(--color-hairline) 0 1px,
       transparent 1px var(--grid-cell)
     );
   /* Radial rather than linear, so the grid has no hard edge on any side: it
@@ -231,15 +173,6 @@
 }
 
 /* --- Wide layouts --------------------------------------------------------- */
-
-@media (min-width: 48rem) {
-  /* Label and description read as one row, like a spec sheet. */
-  .focusItem {
-    grid-template-columns: 9rem minmax(0, 1fr);
-    gap: var(--space-md);
-    align-items: baseline;
-  }
-}
 
 @media (min-width: 64rem) {
   .inner {

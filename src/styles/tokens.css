@@ -22,6 +22,11 @@
   --color-fg-subtle: #7a7a7a;
   --color-accent: #f5f5f5;
   --color-focus: #7dd3fc;
+  /* The pen the whole page draws with: section rules, ledger rows, the plate
+     behind the portrait. It was declared — identically — inside three separate
+     feature stylesheets before the shared section heading needed it too, which
+     is exactly the "valor mágico espalhado" the token layer exists to prevent. */
+  --color-hairline: color-mix(in srgb, var(--color-fg) 9%, transparent);
 
   /* --- Typography ------------------------------------------------------- */
   /* Fallbacks are same-category so the swap from `font-display: swap` shifts

@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import { useAboutReveal } from '../../animations/use-about-reveal';
+import { SectionHeading } from '../../components/SectionHeading';
 import { useTranslation } from '../../lib/i18n';
 import { AboutPortrait } from './AboutPortrait';
 import styles from './AboutSection.module.css';
@@ -27,26 +28,20 @@ export function AboutSection() {
       aria-labelledby={HEADING_ID}
     >
       <div className={styles.inner}>
-        <p className={styles.label} data-about-fade="">
-          <span className={styles.index}>{t.about.index}</span>
-          {t.about.label}
-        </p>
-
-        <h2 id={HEADING_ID} className={styles.headline}>
-          {t.about.headlineLines.map((line) => (
-            <span key={line} className={styles.lineMask}>
-              <span className={styles.line} data-about-line="">
-                {line}
-              </span>
-            </span>
-          ))}
-        </h2>
+        <SectionHeading
+          index={t.about.index}
+          label={t.about.label}
+          lines={t.about.headlineLines}
+          headingId={HEADING_ID}
+          labelClassName={styles.labelArea}
+          headlineClassName={styles.headlineArea}
+        />
 
         <AboutPortrait alt={t.about.portraitAlt} />
 
         <div className={styles.body}>
           {t.about.paragraphs.map((paragraph) => (
-            <p key={paragraph} className={styles.paragraph} data-about-fade="">
+            <p key={paragraph} className={styles.paragraph} data-reveal-fade="">
               {paragraph}
             </p>
           ))}
@@ -56,7 +51,7 @@ export function AboutSection() {
               <li
                 key={principle}
                 className={styles.principle}
-                data-about-fade=""
+                data-reveal-fade=""
               >
                 {principle}
               </li>

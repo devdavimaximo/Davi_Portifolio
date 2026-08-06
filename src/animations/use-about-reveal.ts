@@ -5,70 +5,46 @@ import {
   duration,
   easing,
   reducedMotionDurationScale,
-  stagger,
 } from './motion-tokens';
+import { useSectionReveal } from './use-section-reveal';
 
-/** Masked headline lines, revealed when the section enters the viewport. */
-const LINE = '[data-about-line]';
-/** Supporting copy that fades in behind the headline. */
-const FADE = '[data-about-fade]';
-/** The portrait, which also drifts against the copy while the section passes. */
+/** The portrait, which drifts against the copy while the section passes. */
 const PORTRAIT = '[data-about-portrait]';
 
 /** Fraction of its own height the portrait travels across the whole section. */
 const PARALLAX_REACH = 4;
 
 /**
- * Entrance choreography of the about section.
+ * The about section's entrance: the shared section choreography, plus the one
+ * thing only this section has.
  *
- * Reuses the hero's vocabulary — masked lines first, supporting copy behind it —
- * so the two sections read as one system. The portrait adds a slow, scrubbed
- * drift that only ever writes `transform`, keeping the pass on the compositor.
+ * The portrait joins on the same trigger as the statement, so the two still
+ * arrive together, and then keeps a slow, scrubbed drift that only ever writes
+ * `transform` — reading as depth rather than as an effect: the figure shifts
+ * inside its plate while the plate itself stays put.
  *
- * Everything is created inside `useGSAP`, so tweens and ScrollTriggers are
- * reverted on unmount. Visitors who prefer reduced motion keep the same reveal
- * order as a short fade, with no drift at all.
+ * Visitors who prefer reduced motion get the figure as a plain fade, with no
+ * drift at all.
  */
 export function useAboutReveal(scope: RefObject<HTMLElement | null>): void {
+  useSectionReveal(scope);
+
   useGSAP(
     () => {
+      const root = scope.current;
+      if (!root) return;
+
       const mm = gsap.matchMedia();
 
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap
-          .timeline({
-            scrollTrigger: { trigger: scope.current, start: 'top 70%' },
-          })
-          .from(LINE, {
-            yPercent: 110,
-            duration: duration.slower,
-            ease: easing.expressive,
-            stagger: stagger.loose,
-          })
-          .from(
-            FADE,
-            {
-              autoAlpha: 0,
-              y: 24,
-              duration: duration.slow,
-              ease: easing.standard,
-              stagger: stagger.base,
-            },
-            `-=${duration.slow}`,
-          )
-          .from(
-            PORTRAIT,
-            {
-              autoAlpha: 0,
-              scale: 1.06,
-              duration: duration.slower,
-              ease: easing.expressive,
-            },
-            0,
-          );
+        gsap.from(PORTRAIT, {
+          autoAlpha: 0,
+          scale: 1.06,
+          duration: duration.slower,
+          ease: easing.expressive,
+          scrollTrigger: { trigger: root, start: 'top 70%' },
+        });
 
-        // Subtle enough to read as depth rather than as an effect: the figure
-        // shifts inside its plate while the plate itself stays put.
         gsap.fromTo(
           PORTRAIT,
           { yPercent: -PARALLAX_REACH },
@@ -76,7 +52,7 @@ export function useAboutReveal(scope: RefObject<HTMLElement | null>): void {
             yPercent: PARALLAX_REACH,
             ease: easing.linear,
             scrollTrigger: {
-              trigger: scope.current,
+              trigger: root,
               start: 'top bottom',
               end: 'bottom top',
               scrub: true,
@@ -86,12 +62,11 @@ export function useAboutReveal(scope: RefObject<HTMLElement | null>): void {
       });
 
       mm.add('(prefers-reduced-motion: reduce)', () => {
-        gsap.from([LINE, FADE, PORTRAIT], {
+        gsap.from(PORTRAIT, {
           autoAlpha: 0,
           duration: duration.base * reducedMotionDurationScale,
           ease: easing.standard,
-          stagger: stagger.tight,
-          scrollTrigger: { trigger: scope.current, start: 'top 85%' },
+          scrollTrigger: { trigger: root, start: 'top 85%' },
         });
       });
     },

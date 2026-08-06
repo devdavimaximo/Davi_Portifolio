@@ -15,6 +15,23 @@ export interface ProjectLink {
 }
 
 /**
+ * One layer of the stack, as a spec-sheet row.
+ *
+ * Grouped by layer rather than listed flat, and each group carries a line of
+ * context: a bare list of tool names says what was installed, not what was
+ * built with it. There is deliberately no proficiency score — a self-assigned
+ * "React 80%" is unfalsifiable, and the cases are the evidence instead.
+ */
+export interface SkillGroup {
+  /** Stable identifier, never shown — safe to reorder the list around it. */
+  readonly id: string;
+  readonly label: string;
+  readonly items: readonly string[];
+  /** What this layer actually does in the systems behind the cases. */
+  readonly note: string;
+}
+
+/**
  * The headline figure of a case. Kept as a string rather than a number because
  * these are written for a reader, not computed: "−83%", "12 mil/dia", "4 → 1".
  */

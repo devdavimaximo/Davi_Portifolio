@@ -1,0 +1,206 @@
+/* --- Section -------------------------------------------------------------- */
+
+.skills {
+  /* Distance from the depth axis to the text hanging off it. Also the offset
+     the markers are pulled back by, so the two can never drift apart. */
+  --axis-inset: 2rem;
+  /* Stronger than --color-hairline on purpose: this line is structure, not a
+     divider. It is the spine the whole section hangs from. */
+  --axis-color: color-mix(in srgb, var(--color-fg) 26%, transparent);
+
+  position: relative;
+  padding-block: var(--space-3xl);
+  scroll-margin-top: var(--layout-header-height);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+  display: grid;
+  gap: var(--space-lg);
+}
+
+/* --- The section drawing --------------------------------------------------
+ *
+ * Deliberately NOT the works ledger. That section is a list of rows separated
+ * by full-width rules, and the about stylesheet already warned that a second
+ * one on the same page would read as the same block twice — which is exactly
+ * what the first version of this section did.
+ *
+ * So the stack is drawn as what it is: a section through the system, descending
+ * from the surface the client touches to the foundation holding it up. One
+ * continuous vertical spine, layers hanging off it as nodes, and the depth
+ * named at both ends. Nothing here is a divider; the line is the subject.
+ *
+ * The type roles are inverted against the ledger as well — there the display
+ * face is spent on the figure and mono on the tiny labels; here the layer name
+ * takes the display face and the tools are set in mono. Same two typefaces,
+ * opposite jobs, so the two sections cannot be mistaken for one another even
+ * at a glance.
+ */
+
+.depth {
+  position: relative;
+  margin-top: var(--space-md);
+}
+
+/* The spine. Its own element rather than a pseudo-element, because GSAP draws
+   it on scroll and cannot address a `::before`. */
+.axis {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 1px;
+  background-color: var(--axis-color);
+  /* Drawn downward as the reader descends. Static at full height when no
+     animation runs — CSS never leaves it collapsed, so a tween that fails to
+     play cannot erase the drawing. */
+  transform-origin: top center;
+}
+
+.axisLabel {
+  position: relative;
+  padding-inline-start: var(--axis-inset);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+/* A tick across the spine at each end, so the axis reads as measured rather
+   than as a line that simply stops. */
+.axisLabel::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  inline-size: var(--space-md);
+  block-size: 1px;
+  background-color: var(--axis-color);
+}
+
+.layers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  padding: var(--space-lg) 0 var(--space-lg) var(--axis-inset);
+  margin: 0;
+  list-style: none;
+}
+
+.layer {
+  position: relative;
+}
+
+/* The node on the spine. A square turned on its corner, drawn in the page's own
+   hairline language and filled with the background so the spine appears to pass
+   behind it rather than through it. */
+.marker {
+  position: absolute;
+  inset-inline-start: calc(var(--axis-inset) * -1);
+  inset-block-start: 0.5em;
+  inline-size: 0.4375rem;
+  block-size: 0.4375rem;
+  /* Half the marker, less half the 1px line, to sit centred on the spine. */
+  margin-inline-start: -0.1875rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-fg);
+  transform: rotate(45deg);
+}
+
+.layerName {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.items {
+  margin-block-start: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--space-sm);
+  row-gap: var(--space-3xs);
+  padding: 0;
+  margin-inline: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Separator drawn, never typed: a punctuation character here would be read out
+   as part of the tool's name. This is a 3px square with no text content at all,
+   so it is invisible to assistive technology and still divides the run.
+
+   Trailing the item rather than leading it, which only matters once the run
+   wraps: as a leading mark every wrapped line opened with a bullet and the row
+   stopped reading as one run of tools and started reading as a bulleted list.
+   Trailing, a wrapped line ends on the mark, the way a continued line should. */
+.item:not(:last-child)::after {
+  content: '';
+  inline-size: 3px;
+  block-size: 3px;
+  flex: none;
+  background-color: var(--color-fg-subtle);
+}
+
+.note {
+  margin-block-start: var(--space-sm);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-fg-muted);
+  max-inline-size: 52ch;
+  text-wrap: pretty;
+}
+
+/* --- Wide layouts --------------------------------------------------------- */
+
+/* 64rem, the one structural breakpoint the about and works sections also turn
+   on, so the page changes shape once rather than three times. */
+@media (min-width: 64rem) {
+  .skills {
+    --axis-inset: 4rem;
+  }
+
+  /* The note moves out beside the layer instead of under it: the drawing keeps
+     its vertical rhythm, and the reasoning sits in the margin like an
+     annotation on a section drawing. */
+  .layer {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+    grid-template-areas:
+      'name  note'
+      'items note';
+    column-gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  .layerName {
+    grid-area: name;
+    font-size: var(--text-xl);
+  }
+
+  .items {
+    grid-area: items;
+  }
+
+  .note {
+    grid-area: note;
+    /* Aligned with the layer name's own optical top rather than with its box,
+       so the annotation reads as tied to the name it annotates. */
+    margin-block-start: 0.35em;
+  }
+}
