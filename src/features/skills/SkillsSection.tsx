@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { type CSSProperties, useRef } from 'react';
 
 import { useSectionReveal } from '../../animations/use-section-reveal';
 import { useSkillsDepth } from '../../animations/use-skills-depth';
@@ -11,13 +11,22 @@ import styles from './SkillsSection.module.css';
 const HEADING_ID = 'skills-heading';
 
 /**
+ * How far along the spectrum a layer sits: 0 at the first layer listed, 1 at
+ * the last. Computed from the list's own length rather than written into the
+ * content, so adding or cutting a layer re-spaces the ramp instead of leaving a
+ * gap in it. A single layer has no gradient to sit on and stays at 0.
+ */
+const depthOf = (position: number, total: number): number =>
+  total > 1 ? position / (total - 1) : 0;
+
+/**
  * The stack, drawn as a section through the system.
  *
  * Not a list of tools, and deliberately not a second ledger: one continuous
- * depth axis, with each layer hanging off it as a node, descending from the
- * surface the client touches to the foundation holding it up. The order in
- * `skills.ts` is what the drawing says, so it stays content's decision rather
- * than this component's.
+ * depth axis, with each layer hanging off it as a node, rising from the
+ * foundation that holds the system up to the surface the client touches. The
+ * order in `skills.ts` is what the drawing says, so it stays content's decision
+ * rather than this component's.
  *
  * No proficiency bars and no wall of framework logos — both claim something
  * they cannot back. The argument here is which layer a tool belongs to and what
@@ -55,13 +64,31 @@ export function SkillsSection() {
         <div className={styles.depth} data-reveal-fade="">
           <span className={styles.axis} data-skills-axis="" aria-hidden="true" />
 
-          <p className={styles.axisLabel}>{t.skills.surface}</p>
+          {/* Foundation first: the drawing rises from what holds the system up
+              to what the client touches, which is the order `skills.ts` lists
+              the layers in. The two ends and the list cannot be reordered
+              independently — together they are the claim the section makes. */}
+          <p className={`${styles.axisLabel} ${styles.foundation}`}>
+            {t.skills.foundation}
+          </p>
 
           {/* Ordered, and truthfully so: these layers are read top to bottom as
               depth, which is what an ordered list means. */}
           <ol className={styles.layers} aria-label={t.skills.depthLabel}>
-            {skillGroups.map((group) => (
-              <li key={group.id} className={styles.layer} data-reveal-trail="">
+            {skillGroups.map((group, position) => (
+              <li
+                key={group.id}
+                className={styles.layer}
+                data-reveal-trail=""
+                /* The one number the stylesheet cannot work out for itself:
+                   where this layer falls on the spectrum. Everything else about
+                   the colour is derived from it in CSS. */
+                style={
+                  {
+                    '--layer-depth': depthOf(position, skillGroups.length),
+                  } as CSSProperties
+                }
+              >
                 <span className={styles.marker} aria-hidden="true" />
 
                 <h3 className={styles.layerName}>{group.label}</h3>
@@ -82,7 +109,9 @@ export function SkillsSection() {
             ))}
           </ol>
 
-          <p className={styles.axisLabel}>{t.skills.foundation}</p>
+          <p className={`${styles.axisLabel} ${styles.surface}`}>
+            {t.skills.surface}
+          </p>
         </div>
       </div>
     </section>

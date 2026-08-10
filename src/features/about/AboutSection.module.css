@@ -5,6 +5,35 @@
      technical grid, and its cell follows the spacing scale. The line colour it
      is drawn in is --color-hairline, shared with every rule on the page. */
   --grid-cell: 2.5rem;
+  /**
+   * One knob for the whole portrait's lighting, the same way the skills
+   * section carries one. Mobile-first: this is the narrow value.
+   *
+   * The plate is drawn at a fixed cell size, so a phone shows perhaps five
+   * columns where a desktop shows fifteen — the same tint that reads as a
+   * lattice on a wide screen reads as a lit panel on a narrow one, sitting
+   * right behind a face. Half strength puts it back to being the air the
+   * figure stands in.
+   */
+  --light: 0.5;
+  /**
+   * How the plate dissolves. A radial mask only reaches `transparent` at the
+   * far end of its ramp, so the horizontal radius decides whether the grid
+   * fades out or gets guillotined at the box edge. At 115% the edge sits at
+   * 0.43 of the radius and is still ~65% opaque — on a wide screen the grid is
+   * faint enough out there to get away with it, but on a phone the plate is
+   * barely wider than the face and that cut reads as a lit box behind
+   * someone's head. 78% puts the edge at 0.64 of the radius, ~17% opaque:
+   * the lattice surfaces around the figure and is gone before it ends.
+   */
+  --plate-mask: radial-gradient(78% 85% at 50% 6%, #000 16%, transparent 74%);
+  /* The plate's rules. Tinted rather than neutral, so the lattice behind the
+     figure belongs to the same light as the hero's. */
+  --plate-line: color-mix(
+    in srgb,
+    var(--color-glow-mid) calc(var(--light) * 20%),
+    transparent
+  );
 
   position: relative;
   padding-block: var(--space-3xl);
@@ -111,44 +140,108 @@
 }
 
 /* The plate the figure stands in. It starts below the top of the head on
-   purpose: the subject breaks the rule instead of sitting inside a box. */
+   purpose: the subject breaks the rule instead of sitting inside a box.
+ *
+ * This grid is the hero's lattice seen flat — same drawing, no perspective —
+ * and it was the one place on the page still lit by nothing. Now it is lit by
+ * the same spectrum: the rules carry a faint cyan, and a wash beneath them
+ * falls from cyan at the horizon to violet at the foot, so the figure stands
+ * inside the site's own light instead of on a grey diagram of it.
+ *
+ * The geometry is untouched — same inset, same cell, same mask. Only the ink. */
 .plate {
   position: absolute;
   inset: 20% 0 0;
   z-index: -1;
-  border-top: 1px solid var(--color-hairline);
+  /* The horizon the head breaks through. Lit, because it is the nearest edge
+     of the plate to the viewer. */
+  border-top: 1px solid
+    color-mix(
+      in srgb,
+      var(--color-glow-near) calc(var(--light) * 42%),
+      transparent
+    );
   background-image:
     repeating-linear-gradient(
       to right,
-      var(--color-hairline) 0 1px,
+      var(--plate-line) 0 1px,
       transparent 1px var(--grid-cell)
     ),
     repeating-linear-gradient(
       to bottom,
-      var(--color-hairline) 0 1px,
+      var(--plate-line) 0 1px,
       transparent 1px var(--grid-cell)
-    );
+    ),
+    /* Painted last, so it sits beneath the rules and reads as the air the grid
+       hangs in rather than as a panel behind it. */
+      linear-gradient(
+        168deg,
+        color-mix(
+          in srgb,
+          var(--color-glow-near) calc(var(--light) * 13%),
+          transparent
+        ),
+        transparent 46%,
+        color-mix(
+          in srgb,
+          var(--color-glow-deep) calc(var(--light) * 15%),
+          transparent
+        )
+      );
   /* Radial rather than linear, so the grid has no hard edge on any side: it
-     surfaces around the figure and dissolves into the page everywhere else. */
-  -webkit-mask-image: radial-gradient(
-    115% 85% at 50% 5%,
-    #000 25%,
-    transparent 78%
-  );
-  mask-image: radial-gradient(115% 85% at 50% 5%, #000 25%, transparent 78%);
+     surfaces around the figure and dissolves into the page everywhere else.
+     The narrow and wide radii differ — see `--plate-mask`. */
+  -webkit-mask-image: var(--plate-mask);
+  mask-image: var(--plate-mask);
 }
 
-/* Monochrome, like the rest of the page: just enough lift to separate the
-   figure from pure black so the cut-out does not read as pasted on. */
+/* The light the figure stands in, and the section's one light source.
+ *
+ * It was a single neutral lift, there only to keep the cut-out from reading as
+ * pasted onto pure black. It still does that job — the near tone carries most
+ * of the intensity — but it is now the site's own light rather than grey, with
+ * the deep tone pooling below and behind, the way the hero's lattice falls off
+ * into violet at its far edge.
+ *
+ * Both stops stay well under half strength: this lifts the figure off the
+ * background, it does not tint the photograph. The image itself is untouched.
+ *
+ * Leans toward the pointer — see `use-portrait-light.ts`. GSAP writes only
+ * `transform` here, and the gradients fade to transparent long before the box
+ * edge, so the layer can travel without ever showing one. */
 .glow {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(
-    46% 34% at 50% 34%,
-    color-mix(in srgb, var(--color-fg) 12%, transparent),
-    transparent 70%
-  );
+  background-image:
+    radial-gradient(
+      42% 31% at 47% 32%,
+      color-mix(
+        in srgb,
+        var(--color-glow-near) calc(var(--light) * 20%),
+        transparent
+      ),
+      transparent 70%
+    ),
+    radial-gradient(
+      52% 40% at 58% 56%,
+      color-mix(
+        in srgb,
+        var(--color-glow-deep) calc(var(--light) * 17%),
+        transparent
+      ),
+      transparent 74%
+    );
+  /* One small, continuously-animated layer — the case `will-change` exists for.
+     Not applied anywhere else in the section. */
+  will-change: transform;
+}
+
+/* Nothing to promote when the light never moves. */
+@media (prefers-reduced-motion: reduce) {
+  .glow {
+    will-change: auto;
+  }
 }
 
 .image {
@@ -175,6 +268,13 @@
 /* --- Wide layouts --------------------------------------------------------- */
 
 @media (min-width: 64rem) {
+  .about {
+    /* Full strength, and the wider mask: the values the portrait's lighting
+       was composed at, on the screen it was composed on. */
+    --light: 1;
+    --plate-mask: radial-gradient(115% 85% at 50% 5%, #000 25%, transparent 78%);
+  }
+
   .inner {
     /* Wider left column than the default split: the statement has to fit it on
        one line, and the portrait only needs room for a 20rem figure. */

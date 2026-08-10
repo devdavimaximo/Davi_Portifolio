@@ -6,6 +6,14 @@
   scroll-margin-top: var(--layout-header-height);
 }
 
+/* Nothing here glows. The section's colour is two hairlines' worth: the lit
+   rule between entries and the marker on the control that opens one. No
+   section wash, no bloom behind the figures, no light gathering under the
+   pointer — all of it was measured on a wide screen and turned into visual
+   fatigue on a phone, where a soft glow sits directly behind the text.
+   `isolation` and `overflow-x: clip` went with them: there is no longer a
+   negative-z layer to contain, nor any light drawn past the gutter. */
+
 .inner {
   width: 100%;
   max-width: var(--layout-max-width);
@@ -29,7 +37,54 @@
 /* A rule above every row, including the first: the list reads as a ledger of
    entries rather than as a stack of cards. */
 .case {
+  position: relative;
   border-top: 1px solid var(--color-hairline);
+}
+
+/* The rule between entries lights up under the pointer, sweeping in from the
+ * leading edge of the row — the row answers before anything is opened, and the
+ * light says which entry the reader is on.
+ *
+ * The section rests entirely in black and white: this rule and the marker below
+ * are the only colour in it, and neither appears until the reader asks. The
+ * wash that used to come with them is gone for good — a soft glow behind every
+ * line of text is the sort of contrast the eye keeps trying to resolve and
+ * cannot, which on a phone made the whole ledger tiring to read.
+ *
+ * Sits exactly on top of the neutral border it covers, so nothing moves.
+ * `scaleX` on an element already in place, never a width: this runs on the
+ * compositor and cannot force the ledger to lay itself out again. */
+.case::after {
+  content: '';
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline: 0;
+  block-size: 1px;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    var(--color-glow-near),
+    var(--color-glow-deep)
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-slow) var(--ease-standard);
+}
+
+/* `:focus-within` on the row rather than `:focus-visible` on the control, and
+   that is what makes this work on a phone: tapping a button focuses it but does
+   NOT match `:focus-visible`, which browsers reserve for keyboard entry. Keyed
+   to the row, a tap lights the entry exactly as a hover does — and the keyboard
+   still gets here too, since focusing the trigger focuses within the row. */
+.case:hover::after,
+.case:focus-within::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case::after {
+    transition: none;
+  }
 }
 
 /* The heading carries no style of its own — it exists so each case is a real
@@ -77,14 +132,16 @@
      row answers the finger immediately. */
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  /* Only `color` moves on hover; the row itself never changes size, so nothing
-     below it shifts. */
-  transition: color var(--duration-fast) var(--ease-standard);
 }
 
-.caseTrigger:hover .caseTitle {
-  color: var(--color-fg-muted);
-}
+/* The title deliberately does not change on hover.
+ *
+ * It used to drop to the muted tone, which made sense while the row's only
+ * answer to the pointer was that one word dimming. Now that the rule lights up
+ * and the row itself blooms, dimming the title says the opposite of everything
+ * around it: the entry brightens while its own name fades out. The title holds
+ * its tone and lets the light do the answering.
+ */
 
 /* The row is the click target, so the focus ring belongs around the whole row
    rather than around a word inside it. */
@@ -118,7 +175,6 @@
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   text-wrap: balance;
-  transition: color var(--duration-fast) var(--ease-standard);
 }
 
 .caseSummary {
@@ -145,7 +201,13 @@
   margin-top: var(--space-sm);
 }
 
+/* The figure stays in the neutral ramp. It carried the spectrum for a while,
+   and the type held up, but a coloured figure on every row turns the ledger
+   into three bright spots competing with each other at rest — the colour now
+   arrives when the reader does, in the light behind the figure and along the
+   row's rule, and the figure itself keeps the weight it always had. */
 .metricValue {
+  color: var(--color-fg);
   font-family: var(--font-display);
   font-weight: var(--weight-display);
   font-size: var(--text-xl);
@@ -199,7 +261,19 @@
   inset: 50% 0 auto;
   block-size: 1px;
   background-color: var(--color-fg);
-  transition: transform var(--duration-fast) var(--ease-standard);
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+/* The control catches the same light as the rule above it, and off the same
+   trigger — hover or a tap anywhere in the row — so the two read as one entry
+   lighting up rather than as two things reacting separately. */
+.case:hover .marker::before,
+.case:hover .marker::after,
+.case:focus-within .marker::before,
+.case:focus-within .marker::after {
+  background-color: var(--color-glow-near);
 }
 
 .marker::after {
@@ -269,7 +343,8 @@
 }
 
 .panelLink:hover {
-  border-bottom-color: var(--color-fg);
+  border-bottom-color: var(--color-glow-near);
+  color: var(--color-glow-near);
 }
 
 .panelLink:focus-visible {

@@ -28,7 +28,7 @@ export function AboutPortrait({ alt }: AboutPortraitProps) {
   return (
     <figure className={styles.portrait}>
       <div className={styles.plate} aria-hidden="true" />
-      <div className={styles.glow} aria-hidden="true" />
+      <div className={styles.glow} data-about-glow="" aria-hidden="true" />
       <img
         className={styles.image}
         src="/portrait.webp"

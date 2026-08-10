@@ -4,14 +4,41 @@
   /* Distance from the depth axis to the text hanging off it. Also the offset
      the markers are pulled back by, so the two can never drift apart. */
   --axis-inset: 2rem;
-  /* Stronger than --color-hairline on purpose: this line is structure, not a
-     divider. It is the spine the whole section hangs from. */
-  --axis-color: color-mix(in srgb, var(--color-fg) 26%, transparent);
+  /**
+   * One knob for every halo in the section: both how far it reaches and how
+   * strongly it burns. Light was calibrated on a 1440px screen, in absolute
+   * rem and px — which on a 390px phone is the same amount of glow spread over
+   * a quarter of the area, so a 34rem pool stopped being a pool and became a
+   * wash across the whole width. Scaling reach and intensity together keeps it
+   * reading as light rather than as haze.
+   *
+   * Mobile-first: this is the narrow value, and the wide breakpoint raises it.
+   * The spine itself is deliberately NOT scaled — a 1px line is structure, and
+   * dimming it would cost the drawing its legibility on the screen that needs
+   * it most. Only what glows around it is turned down.
+   */
+  --light: 0.45;
 
   position: relative;
   padding-block: var(--space-3xl);
   scroll-margin-top: var(--layout-header-height);
+  /* Own stacking context, so the light below sits under the section's own
+     content without escaping into the sections around it. */
+  isolation: isolate;
+  /* The node blooms are wider than a phone — 34rem of light hanging off an axis
+     sitting 3rem from the gutter — and measured at 390px they pushed the whole
+     document into a horizontal scroll. Light is allowed to run past the edge of
+     the screen; the page is not. `clip` rather than `hidden` because `hidden`
+     turns the section into a scroll container and takes `overflow-y` with it. */
+  overflow-x: hidden;
+  overflow-x: clip;
 }
+
+/* No section-wide wash here, on purpose. Every bit of light in this section
+   comes from the drawing itself — the spine, its bloom, and the pool at each
+   node — so it always has something visible to be coming *from*. Pools sitting
+   in the section's top and bottom corners read as haze laid over the page
+   instead of as the diagram being lit, which is the opposite of the point. */
 
 .inner {
   width: 100%;
@@ -29,8 +56,8 @@
  * one on the same page would read as the same block twice — which is exactly
  * what the first version of this section did.
  *
- * So the stack is drawn as what it is: a section through the system, descending
- * from the surface the client touches to the foundation holding it up. One
+ * So the stack is drawn as what it is: a section through the system, rising
+ * from the foundation that holds it up to the surface the client touches. One
  * continuous vertical spine, layers hanging off it as nodes, and the depth
  * named at both ends. Nothing here is a divider; the line is the subject.
  *
@@ -53,13 +80,41 @@
   inset-block: 0;
   inset-inline-start: 0;
   inline-size: 1px;
-  background-color: var(--axis-color);
+  /* The spine carries the spectrum itself, so depth is read as colour before
+     it is read as distance — the same gradient the hero's lattice is lit by.
+     Violet at the top and cyan at the foot, because the section now rises from
+     the foundation to the surface, and in the hero's own lighting violet is
+     the far edge and cyan the near one. Flip the list without flipping this
+     and the colour starts arguing with the labels. */
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-glow-deep),
+    var(--color-glow-mid) 48%,
+    var(--color-glow-near)
+  );
+  /* A filament, not a rule: the bloom is what makes a 1px line read as lit.
+     `box-shadow` rather than a blur filter — same reason as the section wash. */
+  box-shadow:
+    0 0 calc(var(--light) * 8px) 0
+      color-mix(
+        in srgb,
+        var(--color-glow-mid) calc(var(--light) * 70%),
+        transparent
+      ),
+    0 0 calc(var(--light) * 22px) 1px
+      color-mix(
+        in srgb,
+        var(--color-glow-mid) calc(var(--light) * 40%),
+        transparent
+      );
   /* Drawn downward as the reader descends. Static at full height when no
      animation runs — CSS never leaves it collapsed, so a tween that fails to
      play cannot erase the drawing. */
   transform-origin: top center;
 }
 
+/* Each end of the axis is named in the hue the spine reaches there, so the two
+   labels are the legend of the gradient as well as its extremes. */
 .axisLabel {
   position: relative;
   padding-inline-start: var(--axis-inset);
@@ -67,7 +122,15 @@
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: var(--color-fg-subtle);
+  color: color-mix(in srgb, var(--end-tint) 75%, var(--color-fg-muted));
+}
+
+.surface {
+  --end-tint: var(--color-glow-near);
+}
+
+.foundation {
+  --end-tint: var(--color-glow-deep);
 }
 
 /* A tick across the spine at each end, so the axis reads as measured rather
@@ -79,7 +142,9 @@
   inset-block-start: 0.55em;
   inline-size: var(--space-md);
   block-size: 1px;
-  background-color: var(--axis-color);
+  background-color: var(--end-tint);
+  box-shadow: 0 0 calc(var(--light) * 10px) 0
+    color-mix(in srgb, var(--end-tint) calc(var(--light) * 55%), transparent);
 }
 
 .layers {
@@ -93,11 +158,45 @@
 
 .layer {
   position: relative;
+  /* Where this layer sits on the spectrum, mixed from the position React hands
+     down as `--layer-depth` (0 at the first layer listed, 1 at the last).
+     Derived rather than hard-coded per layer: the ramp re-spaces itself when a
+     layer is added or removed, so content stays free to change without a
+     stylesheet edit. Interpolated in oklab, because sRGB drags a violet-to-cyan
+     mix through a muddy middle that neither end would recognise.
+
+     Runs deep → near, matching the spine above it: the list opens at the
+     foundation and ends at the surface. */
+  --layer-tint: color-mix(
+    in oklab,
+    var(--color-glow-deep),
+    var(--color-glow-near) calc(var(--layer-depth) * 100%)
+  );
+}
+
+/* The light the node sits in. Small and very soft: enough to lift the layer off
+   pure black and tie it to its own depth, not enough to compete with the type
+   that carries the meaning. */
+.layer::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: calc(var(--axis-inset) * -1);
+  inset-block-start: calc(var(--light) * -3.5rem);
+  inline-size: calc(var(--light) * 34rem);
+  block-size: calc(var(--light) * 16rem);
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(
+    46% 48% at 2% 50%,
+    color-mix(in srgb, var(--layer-tint) calc(var(--light) * 32%), transparent),
+    transparent 72%
+  );
 }
 
 /* The node on the spine. A square turned on its corner, drawn in the page's own
    hairline language and filled with the background so the spine appears to pass
-   behind it rather than through it. */
+   behind it rather than through it — now lit in its own depth's hue, so the
+   markers read as readings taken along the gradient. */
 .marker {
   position: absolute;
   inset-inline-start: calc(var(--axis-inset) * -1);
@@ -107,7 +206,12 @@
   /* Half the marker, less half the 1px line, to sit centred on the spine. */
   margin-inline-start: -0.1875rem;
   background-color: var(--color-bg);
-  border: 1px solid var(--color-fg);
+  border: 1px solid var(--layer-tint);
+  box-shadow:
+    0 0 0 3px
+      color-mix(in srgb, var(--layer-tint) calc(var(--light) * 10%), transparent),
+    0 0 calc(var(--light) * 14px) 1px
+      color-mix(in srgb, var(--layer-tint) calc(var(--light) * 55%), transparent);
   transform: rotate(45deg);
 }
 
@@ -154,7 +258,10 @@
   inline-size: 3px;
   block-size: 3px;
   flex: none;
-  background-color: var(--color-fg-subtle);
+  /* Lit in the layer's own hue: the run of tools then belongs to its depth
+     rather than floating grey above it. The tools themselves stay neutral —
+     colour is for structure, never for the words. */
+  background-color: var(--layer-tint);
 }
 
 .note {
@@ -173,6 +280,9 @@
 @media (min-width: 64rem) {
   .skills {
     --axis-inset: 4rem;
+    /* Full strength: the values every halo here was originally composed at,
+       on the screen it was composed on. */
+    --light: 1;
   }
 
   /* The note moves out beside the layer instead of under it: the drawing keeps

@@ -76,7 +76,7 @@ export const ptBr = {
     foundation: 'Fundação',
     /* Names the axis for screen readers, which get the layers as a plain
        ordered list and never see the drawing. */
-    depthLabel: 'Camadas do sistema, da superfície à fundação',
+    depthLabel: 'Camadas do sistema, da fundação à superfície',
   },
   caseStudy: {
     breadcrumbLabel: 'Trilha de navegação',

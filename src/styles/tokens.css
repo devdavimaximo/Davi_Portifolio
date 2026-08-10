@@ -22,6 +22,23 @@
   --color-fg-subtle: #7a7a7a;
   --color-accent: #f5f5f5;
   --color-focus: #7dd3fc;
+
+  /* --- Spectrum ---------------------------------------------------------
+   * The light of the hero, sampled from the scene itself rather than picked:
+   * the lattice is lit along a gradient that runs cyan at the near edge,
+   * through blue, to violet at the far one. Measured off a render — near
+   * #4db8ff, centre #6b9cff, far #aa8dfb.
+   *
+   * So the ramp is not decoration, it is depth. That is the whole rule for
+   * using it: colour arrives as light on structure — rules, markers, figures,
+   * atmosphere — and never as a fill behind body copy or as coloured prose.
+   * Text keeps the neutral ramp, so contrast stays where it was.
+   *
+   * All three clear AA on pure black by a wide margin (9.6:1, 8.6:1, 7.9:1),
+   * which is what makes them safe on a headline figure. */
+  --color-glow-near: #4db8ff;
+  --color-glow-mid: #6b9cff;
+  --color-glow-deep: #aa8dfb;
   /* The pen the whole page draws with: section rules, ledger rows, the plate
      behind the portrait. It was declared — identically — inside three separate
      feature stylesheets before the shared section heading needed it too, which

@@ -1,12 +1,14 @@
 import type { SkillGroup } from './types';
 
 /**
- * The stack, by layer — ordered from the surface down to the foundation.
+ * The stack, by layer — ordered from the foundation up to the surface.
  *
  * The order is the argument, not alphabetical and not "most impressive first":
- * the section is drawn as a section *through* the system, descending from what
- * the client actually touches to what holds it up. Reordering these entries
- * changes what that drawing says.
+ * the section is drawn as a section *through* the system, starting at what
+ * holds it up and rising to what the client actually touches. It opens on the
+ * back end because that is where this work lives — the about section says as
+ * much — and the axis is labelled to match. Reordering these entries changes
+ * what that drawing says, so the ends of the axis have to move with them.
  *
  * Content, not markup — same contract the cases follow: adding a tool must
  * never mean touching a component. The prose lives here rather than in the i18n
@@ -22,18 +24,6 @@ import type { SkillGroup } from './types';
  */
 export const skillGroups: readonly SkillGroup[] = [
   {
-    id: 'product',
-    label: 'Produto e interface',
-    items: ['UI/UX', 'Design system', 'Acessibilidade', 'SEO técnico'],
-    note: 'Entender o fluxo real antes de desenhar a tela. Foi o que separou o PDV que a cliente usa do sistema que ela abandonou.',
-  },
-  {
-    id: 'frontend',
-    label: 'Front-end',
-    items: ['React', 'TypeScript', 'JavaScript', 'TailwindCSS', 'GSAP'],
-    note: 'Interface que a equipe usa seis horas por dia. Aqui velocidade de leitura e atalho de teclado valem mais do que efeito visual.',
-  },
-  {
     id: 'backend',
     label: 'Back-end',
     items: ['C#', 'ASP.NET Core', 'APIs REST', 'Autenticação e permissões'],
@@ -42,7 +32,19 @@ export const skillGroups: readonly SkillGroup[] = [
   {
     id: 'data',
     label: 'Dados',
-    items: ['PostgreSQL', 'Modelagem relacional', 'Relatórios e indicadores'],
+    items: ['PostgreSQL', 'SQL Server', 'MySQL', 'Relatórios e indicadores'],
     note: 'Modelagem pensada para a operação durar: um esquema mal resolvido não aparece no primeiro mês, aparece quando já há dado demais para voltar atrás.',
+  },
+  {
+    id: 'frontend',
+    label: 'Front-end',
+    items: ['React', 'TypeScript', 'JavaScript', 'TailwindCSS'],
+    note: 'Interface que a equipe usa seis horas por dia. Aqui velocidade de leitura e atalho de teclado valem mais do que efeito visual.',
+  },
+  {
+    id: 'product',
+    label: 'Produto e interface',
+    items: ['UI/UX', 'Design system', 'Acessibilidade', 'SEO técnico'],
+    note: 'Entender o fluxo real antes de desenhar a tela. Foi o que separou o PDV que a cliente usa do sistema que ela abandonou.',
   },
 ];

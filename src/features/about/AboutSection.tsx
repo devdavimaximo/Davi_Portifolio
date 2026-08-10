@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import { useAboutReveal } from '../../animations/use-about-reveal';
+import { usePortraitLight } from '../../animations/use-portrait-light';
 import { SectionHeading } from '../../components/SectionHeading';
 import { useTranslation } from '../../lib/i18n';
 import { AboutPortrait } from './AboutPortrait';
@@ -19,6 +20,7 @@ export function AboutSection() {
   const { t } = useTranslation();
 
   useAboutReveal(sectionRef);
+  usePortraitLight(sectionRef);
 
   return (
     <section
