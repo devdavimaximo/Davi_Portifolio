@@ -32,6 +32,43 @@ export interface SkillGroup {
 }
 
 /**
+ * A public profile where a visitor can reach the author.
+ *
+ * E-mail is deliberately not one of these: it is the secondary channel, reached
+ * through `siteConfig.author.email`, and it is not a profile a search engine
+ * can tie to a person.
+ */
+export interface ContactChannel {
+  /** Stable identifier, never shown — safe to reorder the list around it. */
+  readonly id: string;
+  /** Name of the network as the visitor knows it, e.g. "LinkedIn". */
+  readonly label: string;
+  /** The address as it is typeset on the page, e.g. "in/davimaximo". */
+  readonly handle: string;
+  readonly href: string;
+}
+
+/**
+ * The channels, main one first. A non-empty tuple rather than an array with a
+ * `primary` flag: a flag allows zero or two main channels, the tuple cannot.
+ */
+export type ContactChannels = readonly [ContactChannel, ...ContactChannel[]];
+
+/**
+ * The downloadable résumé. Format and size are written for the reader, like a
+ * case's metric, and shown beside the link: a visitor on mobile data is owed
+ * the weight of a file before tapping it.
+ */
+export interface Resume {
+  /** Site-relative path of the file under `public/`. */
+  readonly href: string;
+  /** Name the file is saved under, set through the link's `download`. */
+  readonly fileName: string;
+  readonly format: string;
+  readonly size: string;
+}
+
+/**
  * The headline figure of a case. Kept as a string rather than a number because
  * these are written for a reader, not computed: "−83%", "12 mil/dia", "4 → 1".
  */

@@ -7,6 +7,7 @@
  * never emit each other's canonical URLs.
  */
 
+import { contactChannels } from '../../content/contact-channels';
 import { defaultLocale } from '../i18n';
 
 const FALLBACK_ORIGIN = 'https://example.com';
@@ -44,20 +45,26 @@ export interface SiteConfig {
   readonly themeColor: string;
 }
 
-// TODO(F0): replace the placeholder copy and links once the art direction and
-// the public domain are settled.
+// The identity below is the one the hero, the about section and the cases
+// argue for: full stack, weighted towards the .NET back end. The `Person`
+// JSON-LD is what a search engine reads, so it must not describe someone the
+// page itself does not.
+//
+// TODO(F0): Twitter handle and the default share image are still missing.
 export const siteConfig: SiteConfig = {
   name: 'Davi Maximo',
-  title: 'Davi Maximo — Desenvolvedor Front-end',
+  title: 'Davi Maximo — Desenvolvedor Full Stack C# / .NET',
   titleTemplate: '%s — Davi Maximo',
   description:
-    'Desenvolvedor front-end criando experiências web rápidas, acessíveis e memoráveis.',
+    'Desenvolvedor full stack com foco em back-end C# / .NET. Sistemas em produção, do banco de dados à interface, com arquitetura, performance e escalabilidade.',
   keywords: [
-    'desenvolvedor front-end',
-    'desenvolvedor criativo',
+    'desenvolvedor full stack',
+    'desenvolvedor .NET',
+    'C#',
+    'ASP.NET Core',
+    'back-end',
     'react',
     'typescript',
-    'animação web',
     'portfólio',
   ],
   // Derived from the i18n base locale so the two can never disagree.
@@ -65,9 +72,11 @@ export const siteConfig: SiteConfig = {
   htmlLang: defaultLocale,
   author: {
     name: 'Davi Maximo',
-    jobTitle: 'Desenvolvedor Front-end',
-    email: 'davimaximoquooss@gmail.com',
-    sameAs: [],
+    jobTitle: 'Desenvolvedor Full Stack C# / .NET',
+    email: 'devdavimaximo@gmail.com',
+    // Read from the same list the contact section and the footer render, so
+    // the profiles a crawler links to are always the ones a visitor sees.
+    sameAs: contactChannels.map((channel) => channel.href),
   },
   defaultOgImage: '/og/default.png',
   twitterHandle: '',

@@ -1,4 +1,5 @@
 import { AboutSection } from '../../features/about';
+import { ContactSection } from '../../features/contact';
 import { HeroSection } from '../../features/hero';
 import { SkillsSection } from '../../features/skills';
 import { WorksSection } from '../../features/works';
@@ -16,6 +17,7 @@ export default function HomePage() {
       <AboutSection />
       <WorksSection />
       <SkillsSection />
+      <ContactSection />
     </>
   );
 }

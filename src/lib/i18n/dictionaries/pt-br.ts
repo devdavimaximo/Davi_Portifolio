@@ -12,6 +12,7 @@ export const ptBr = {
   header: {
     wordmark: 'Davi Maximo Quoos',
     contact: 'Vamos conversar',
+    navLabel: 'Navegação principal',
   },
   home: {
     title: 'Início',
@@ -77,6 +78,37 @@ export const ptBr = {
     /* Names the axis for screen readers, which get the layers as a plain
        ordered list and never see the drawing. */
     depthLabel: 'Camadas do sistema, da fundação à superfície',
+  },
+  contact: {
+    index: '04',
+    label: 'Contato',
+    /* Answers the works headline ("Cada um resolveu um problema caro."), so the
+       page closes on the argument it opened. Short for the same reason as the
+       skills headline: the shared mask never wraps a line. */
+    headlineLines: ['Tem um problema caro?', 'Vamos resolver.'],
+    /* Spec-sheet labels over each way in, in the section's reading order. */
+    elsewhere: 'Também em',
+    resume: {
+      label: 'Currículo',
+      download: 'Baixar',
+    },
+    email: {
+      label: 'E-mail',
+      copy: 'Copiar',
+      copied: 'Copiado',
+      failed: 'Não copiou',
+      /* Spoken rather than shown: the button's own label already tells a
+         sighted visitor what happened. */
+      copiedAnnouncement: 'E-mail copiado para a área de transferência.',
+      failedAnnouncement:
+        'Não foi possível copiar. Use o link do e-mail ao lado.',
+    },
+  },
+  footer: {
+    /* Accessible names of the two lists, which read alike without them. */
+    sectionsLabel: 'Seções da página',
+    channelsLabel: 'Redes',
+    backToTop: 'Voltar ao topo',
   },
   caseStudy: {
     breadcrumbLabel: 'Trilha de navegação',

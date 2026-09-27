@@ -1,0 +1,148 @@
+/* --- Frame ---------------------------------------------------------------- */
+
+/* One hairline across the top and nothing else: the page's own pen, closing
+   the document the way the section labels open each part of it. No colour —
+   the spectrum's last appearance is the rule under the contact channel, and
+   repeating it here would take the ending away from that line. */
+.footer {
+  border-top: 1px solid var(--color-hairline);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+  padding-block: var(--space-xl) var(--space-lg);
+  display: grid;
+  grid-template-areas:
+    'identity'
+    'sections'
+    'channels'
+    'base';
+  gap: var(--space-lg);
+}
+
+/* --- Identity ------------------------------------------------------------- */
+
+.identity {
+  grid-area: identity;
+  display: grid;
+  /* Packed to the top. Stretched, the cell grew to the height of the section
+     list beside it and spread its two lines ~90px apart, leaving the role
+     floating on its own. */
+  align-content: start;
+  gap: var(--space-3xs);
+  justify-items: start;
+}
+
+/* Same treatment as the header's wordmark, so the name opens and closes the
+   page in one voice. */
+.wordmark {
+  font-weight: 500;
+  letter-spacing: var(--tracking-tight);
+  text-decoration: none;
+}
+
+.role {
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+}
+
+/* --- Lists ---------------------------------------------------------------- */
+
+.sections {
+  grid-area: sections;
+}
+
+.channels {
+  grid-area: channels;
+}
+
+/* Composed from the section navigation rather than redeclared: the profiles and
+   the way back up are drawn with the same pen as the section links beside
+   them. */
+.list {
+  composes: list from './SectionNav.module.css';
+}
+
+.link {
+  composes: link from './SectionNav.module.css';
+}
+
+.arrow {
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.link:hover .arrow,
+.link:focus-visible .arrow {
+  transform: translate(2px, -2px);
+}
+
+/* "Back to top" travels the way it takes the reader. */
+.link[href='#main']:hover .arrow,
+.link[href='#main']:focus-visible .arrow {
+  transform: translateY(-3px);
+}
+
+/* --- Base line ------------------------------------------------------------ */
+
+.base {
+  grid-area: base;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-hairline);
+}
+
+.copyright {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-fg-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
+
+  .link:hover .arrow,
+  .link:focus-visible .arrow,
+  .link[href='#main']:hover .arrow,
+  .link[href='#main']:focus-visible .arrow {
+    transform: none;
+  }
+}
+
+/* --- Wide layouts --------------------------------------------------------- */
+
+/* 64rem, the structural breakpoint every section turns on. Identity takes the
+   leading half; the two lists share the trailing half as columns, stacked
+   vertically so each reads top-down like the index it is. */
+@media (min-width: 64rem) {
+  .inner {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(0, 3fr);
+    grid-template-areas:
+      'identity sections channels'
+      'base     base     base';
+    row-gap: var(--space-xl);
+  }
+
+  /* Placement only, on both lists — including the one inside `<SectionNav />`
+     — so they turn into columns together. It composes nothing, so the section
+     list does not receive its base class twice. */
+  .column {
+    flex-direction: column;
+    align-items: flex-start;
+    /* Each link is a 44px touch target with its text centred inside, which
+       sat the first entry's text below the wordmark's line. Pulling the list
+       up by half the difference between the target and one line puts the two
+       on the same line without shrinking the target. */
+    margin-block-start: calc((1lh - 2.75rem) / 2);
+  }
+}

@@ -19,6 +19,16 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
 
+    define: {
+      // Fixed at build time rather than read from the visitor's clock: the
+      // pre-rendered HTML and the hydrating client must print the same year,
+      // or the footer mismatches on every page from 1 January until the next
+      // deploy.
+      'import.meta.env.VITE_BUILD_YEAR': JSON.stringify(
+        String(new Date().getFullYear()),
+      ),
+    },
+
     server: {
       // Keep dev and preview below 49152: Windows lets Hyper-V/WSL reserve
       // blocks of the ephemeral range, and binding inside one fails with

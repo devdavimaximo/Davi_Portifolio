@@ -1,0 +1,323 @@
+/* --- Section -------------------------------------------------------------- */
+
+.contact {
+  position: relative;
+  padding-block: var(--space-3xl);
+  scroll-margin-top: var(--layout-header-height);
+}
+
+/* No wash and no pool of light behind the copy, for the reason the works
+   stylesheet records: a glow sitting behind text was measured as tiring on a
+   phone. The section's only colour is the one rule under the main channel. */
+
+.inner {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+  display: grid;
+  gap: var(--space-lg);
+}
+
+/* The section label and the masked statement live in SectionHeading.module.css,
+   shared with every other section. */
+
+/* --- Main channel ---------------------------------------------------------
+ *
+ * The address itself, in the display face — the figure of this section, the
+ * way the metric is the figure of a case. Sized against its own column with a
+ * container query rather than the viewport, for the reason the shared headline
+ * gives: the column stops tracking `vw` at both ends of the range.
+ */
+
+.primary {
+  position: relative;
+  display: grid;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+  padding-block-end: var(--space-md);
+  text-decoration: none;
+  container-type: inline-size;
+}
+
+.network {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+.handle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2em;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  /* "in/davimaximoquoos" plus its arrow measures ~10.3em in Chakra Petch, so
+     9cqi is the largest size that still holds one line from a 320px phone up;
+     on wide columns the display size caps it. At 8cqi a phone set the address
+     no larger than the headline above it, and the figure stopped being one. */
+  font-size: clamp(var(--text-lg), 9cqi, var(--text-display));
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  /* A longer handle, if the content ever changes, breaks inside itself rather
+     than pushing the page into a horizontal scroll. */
+  overflow-wrap: anywhere;
+}
+
+/* Travels toward where the link goes — up and out — on hover and focus. Only
+   `transform`, so nothing around it is laid out again. */
+.primaryArrow {
+  flex: none;
+  font-size: 0.5em;
+  color: var(--color-fg-muted);
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.primary:hover .primaryArrow,
+.primary:focus-visible .primaryArrow {
+  transform: translate(0.15em, -0.15em);
+}
+
+/* The rule the hero's spectrum converges into. Drawn at rest — it is the one
+   light in the section and marks where the page asks the reader to go — and
+   drawn by CSS at full length, so a tween that fails to run cannot erase it.
+   GSAP only ever collapses it to play it back in. */
+.signal {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  block-size: 1px;
+  background-image: linear-gradient(
+    to right,
+    var(--color-glow-near),
+    var(--color-glow-mid) 48%,
+    var(--color-glow-deep)
+  );
+  transform-origin: left center;
+}
+
+/* The bloom. Its own layer with a fixed shadow, and only its `opacity` moves —
+   transitioning the shadow itself would repaint the filament on every frame.
+   Tight to the line, so it lights the rule and never the words above it.
+
+   Lit at rest, not only under the pointer: measured on a 2x capture, a bare
+   1px gradient on pure black read as a grey rule, and the section looked as
+   black-and-white as it did before colour arrived. A filament needs its
+   bloom to read as light — the same lesson the skills axis records. The
+   pointer only turns it up. */
+.signal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    0 0 6px 0 color-mix(in srgb, var(--color-glow-mid) 70%, transparent),
+    0 0 18px 1px color-mix(in srgb, var(--color-glow-mid) 35%, transparent);
+  opacity: 0.55;
+  transition: opacity var(--duration-slow) var(--ease-standard);
+}
+
+.primary:hover .signal::after,
+.primary:focus-visible .signal::after {
+  opacity: 1;
+}
+
+/* --- The spec sheet under it ----------------------------------------------
+ *
+ * Not full-width rules between entries: that is the works ledger, and a second
+ * one on the page would read as the same block twice. Each label carries a
+ * short tick instead — a measured mark, like the ends of the skills axis.
+ */
+
+.details {
+  display: grid;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.detail {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2xs);
+}
+
+.detailLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+.detailLabel::before {
+  content: '';
+  flex: none;
+  inline-size: var(--space-md);
+  block-size: 1px;
+  background-color: var(--color-hairline);
+}
+
+.detailValue {
+  margin: 0;
+}
+
+.channels {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-md);
+  padding: 0;
+  list-style: none;
+}
+
+/* Same pen as the link out of a case in the works panel — mono, a hairline
+   underneath that lights cyan under the pointer, an arrow that travels — so a
+   secondary link reads as the same kind of thing everywhere on the page. The
+   block size is the 44px touch target; the rule sits on its baseline. */
+.detailLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-block-size: 2.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+/* Only the name is underlined. On the link itself every flex child drew its
+   own stretch of underline, so the rule came out cut into three pieces with
+   gaps between them — name, meta and arrow each underlined separately. */
+.detailName {
+  text-decoration: underline;
+  text-decoration-color: var(--color-hairline);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.45em;
+  transition: text-decoration-color var(--duration-fast) var(--ease-standard);
+}
+
+/* Keyboard focus answers exactly as the pointer does, here and on every
+   control below: the feedback is part of the control, not a mouse extra. */
+.detailLink:hover,
+.detailLink:focus-visible {
+  color: var(--color-glow-near);
+}
+
+.detailLink:hover .detailName,
+.detailLink:focus-visible .detailName {
+  text-decoration-color: var(--color-glow-near);
+}
+
+.detailMeta {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+.detailArrow {
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.detailLink:hover .detailArrow,
+.detailLink:focus-visible .detailArrow {
+  transform: translate(2px, -2px);
+}
+
+/* The download arrow travels the way the file does. */
+.detailLink[download]:hover .detailArrow,
+.detailLink[download]:focus-visible .detailArrow {
+  transform: translateY(3px);
+}
+
+/* --- E-mail --------------------------------------------------------------- */
+
+.email {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--space-sm);
+}
+
+.emailLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-decoration-color: var(--color-hairline);
+  text-underline-offset: 0.45em;
+  /* An address is one token; on the narrowest phones it may still have to
+     break, and it should do so rather than overflow. */
+  overflow-wrap: anywhere;
+  transition: text-decoration-color var(--duration-fast) var(--ease-standard);
+}
+
+.emailLink:hover,
+.emailLink:focus-visible {
+  text-decoration-color: var(--color-fg);
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  /* Wide enough for the longest of its three labels in mono, so swapping
+     "Copiar" for "Não copiou" never moves the control. */
+  min-inline-size: 13ch;
+  padding-inline: var(--space-sm);
+  background: none;
+  border: 1px solid color-mix(in srgb, var(--color-fg) 30%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.copy:hover,
+.copy:focus-visible {
+  border-color: var(--color-fg);
+}
+
+.copy[data-status='copied'] {
+  border-color: var(--color-glow-near);
+  color: var(--color-glow-near);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryArrow,
+  .detailArrow {
+    transition: none;
+  }
+
+  .primary:hover .primaryArrow,
+  .primary:focus-visible .primaryArrow,
+  .detailLink:hover .detailArrow,
+  .detailLink:focus-visible .detailArrow {
+    transform: none;
+  }
+}
+
+/* --- Wide layouts --------------------------------------------------------- */
+
+/* 64rem, the one structural breakpoint every section turns on. The spec sheet
+   goes from a stack to a row of columns — as many as there are entries, so a
+   missing résumé closes up instead of leaving a hole. */
+@media (min-width: 64rem) {
+  .details {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    column-gap: var(--space-2xl);
+  }
+}

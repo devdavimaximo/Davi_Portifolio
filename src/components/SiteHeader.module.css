@@ -20,6 +20,22 @@
   justify-content: space-between;
 }
 
+/* Section links from the wide breakpoint only — below it the footer carries
+   them. `display: none` also takes them out of the accessibility tree, so a
+   narrow screen does not announce a navigation it does not show. */
+.nav {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .nav {
+    display: block;
+    /* Pushed against the action, so wordmark and navigation read as the two
+       ends of the bar rather than three items spaced evenly across it. */
+    margin-inline: auto var(--space-lg);
+  }
+}
+
 .wordmark {
   font-weight: 500;
   letter-spacing: var(--tracking-tight);
